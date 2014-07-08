@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sudoku_backgroud">#FFFFFF</color>
+    <color name="sudoku_title">#000000</color>
+    <color name="sudoku_sub_title">#000000</color>
+    <color name="sudoku_btn_text">#DDDDDD</color>
+
+    <color name="puzzle_background">#FFFFFF</color>
+    <color name="puzzle_graybackgroud">#EEEEEE</color>
+    <color name="puzzle_number_background">#CCCCCC</color>
+    <color name="puzzle_hilite">#000000</color>
+    <color name="puzzle_light">#64c6d4ef</color>
+    <color name="puzzle_dark">#000000</color>
+    <color name="puzzle_red">#FF0000</color>
+    <color name="puzzle_foreground">#ff000000</color>
+    <color name="puzzle_foreground_init">#ff2D9DAB</color>
+    <color name="puzzle_hint_0">#64FF0000</color>
+    <color name="puzzle_hint_1">#64FFA843</color>
+    <color name="puzzle_hint_2">#64FFE32A</color>
+    <color name="puzzle_selected">#644DB849</color>
+
+    <color name="keypad_text">#FFFFFF</color>
+</resources>
