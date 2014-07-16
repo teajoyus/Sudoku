@@ -16,6 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".About"
+            android:label="@string/title_activity_about"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name=".Prefs"
+            android:label="@string/settings_label">
+        </activity>
+        "
+        <activity
+            android:name=".Game"
+            android:label="@string/title_activity_game" >
+        </activity>
+
     </application>
 
 </manifest>
