@@ -8,8 +8,6 @@ import android.view.View;
 
 public class Keypad extends Dialog {
 
-   protected static final String TAG = "Sudoku";
-
    private final View keys[] = new View[9];
    private View keypad;
    private final int useds[];
@@ -38,9 +36,10 @@ public class Keypad extends Dialog {
    }
    // ...
 
+   @SuppressWarnings("all")
    @Override
    public boolean onKeyDown(int keyCode, KeyEvent event) {
-      int tile = 0;
+      int tile;
       switch (keyCode) {
       case KeyEvent.KEYCODE_0:
       case KeyEvent.KEYCODE_SPACE: tile = 0; break;

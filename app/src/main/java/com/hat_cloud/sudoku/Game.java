@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,14 +12,12 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class Game extends Activity {
@@ -38,40 +35,8 @@ public class Game extends Activity {
 	   
 	   protected int puzzle[];
 	   protected int initPuzzle[];
-	   private final String seedPuzzle =
-			      "978312645"
-			    + "312645978"
-			    + "645978312" 
-			    + "789123456"
-			    + "123456789"
-			    + "456789123" 
-			    + "897231564"
-			    + "231564897"
-			    + "564897231";
-/*		   private final String easyPuzzle =
-			      "978312645"
-			    + "312645978"
-			    + "645978312" 
-			    + "789123456"
-			    + "123456789"
-			    + "456789123" 
-			    + "897231564"
-			    + "231564897"
-			    + "564897230";
-   private final String easyPuzzle =
-	      "360000000004230800000004200" +
-	      "070460003820000014500013020" +
-	      "001900000007048300000000045";
-	   private final String mediumPuzzle =
-	      "650000070000506000014000005" +
-	      "007009000002314700000700800" +
-	      "500000630000201000030000097";
-	   private final String hardPuzzle =
-	      "009000000080605020501078000" +
-	      "000000700706040102004000000" +
-	      "000720903090301080000000600";*/
 
-	   private PuzzleView puzzleView;
+    private PuzzleView puzzleView;
 	      
 	   
 
@@ -84,21 +49,19 @@ public class Game extends Activity {
 	      int diff = getIntent().getIntExtra(KEY_DIFFICULTY,
 	              DIFFICULTY_EASY);
 	      puzzle = getPuzzle(diff);
-	      /*if(diff == DIFFICULTY_CONTINUE){
-	    	  initPuzzle = fromPuzzleString(getPreferences(MODE_PRIVATE).getString(PREF_INIT_PUZZLE, seedPuzzle));
-	      }else{
-	    	  initPuzzle = puzzle;
-	      }*/
 	      
 	      calculateUsedTiles();
 	      puzzleView = new PuzzleView(this);
 	      setContentView(R.layout.activity_game);
 	      
-	      ActionBar actionBar=getActionBar();
-          actionBar.show();
-          actionBar.setDisplayHomeAsUpEnabled(true);
-	      
-	      LinearLayout mLayout;
+	      ActionBar actionBar;
+          actionBar = getActionBar();
+          if (actionBar != null) {
+              actionBar.show();
+              actionBar.setDisplayHomeAsUpEnabled(true);
+          }
+
+          LinearLayout mLayout;
 	      mLayout = (LinearLayout) findViewById(R.id.gamelayout);
 	      mLayout.addView(puzzleView);
 	      
@@ -141,7 +104,7 @@ public class Game extends Activity {
 	   protected void onPause() {    
 		   super.onPause();    
 		   Log.d(TAG, "onPause" );    
-		   Music.stop(this);    
+		   Music.stop();
 		   // Save the current puzzle    
 		   getPreferences(MODE_PRIVATE).edit().putString(PREF_PUZZLE, toPuzzleString(puzzle)).commit();
 		   getPreferences(MODE_PRIVATE).edit().putString(PREF_INIT_PUZZLE, toPuzzleString(initPuzzle)).commit();
@@ -182,10 +145,19 @@ public class Game extends Activity {
 	   
 	   /** Given a difficulty level, come up with a new puzzle */
 	   private int[] getPuzzle(int diff) {
-	      String puzString = creatSudokuArray(seedPuzzle);
+           String seedPuzzle = "978312645"
+                   + "312645978"
+                   + "645978312"
+                   + "789123456"
+                   + "123456789"
+                   + "456789123"
+                   + "897231564"
+                   + "231564897"
+                   + "564897231";
+           String puzString = creatSudokuArray(seedPuzzle);
 	      Log.d(TAG, "on getPuzzle(), puzString:" + puzString);
 	      int[] puzInt = fromPuzzleString(puzString);
-	      int removeNum = 0;
+	      int removeNum;
 	      
 	      //Continue last game
 	      switch (diff) {
@@ -214,17 +186,17 @@ public class Game extends Activity {
 	    	  removeNums[i] = random.nextInt(81);
 	    	  
 	    	  for (int j = 0; j < i; j++) {
-	    		  while (removeNums[i] == removeNums[j]) {//������������������������������
+	    		  while (removeNums[i] == removeNums[j]) {
 						i--;
 					}
 	    	  }
 	      }
 	      
 	      Log.d(TAG, "on getPuzzle(), removeNums:" + toPuzzleString(removeNums));
-	      
-	      for(int i = 0; i < removeNums.length; i++){
-	    	  puzInt[removeNums[i]] = 0;
-	      }
+
+           for (int removeNum1 : removeNums) {
+               puzInt[removeNum1] = 0;
+           }
 	      initPuzzle = puzInt;
 	      puzString = toPuzzleString(puzInt);
 	      Log.d(TAG, "on getPuzzle(), puzString:" + puzString);    
@@ -283,10 +255,7 @@ public class Game extends Activity {
 	   }
 
 	   protected boolean isInitNumber(int x, int y) {
-		      if(initPuzzle[y * 9 + x] != 0)
-		    	  return true;
-		      else
-		    	  return false;
+           return initPuzzle[y * 9 + x] != 0;
 		   }
 	   
 	   /** Judge that whether the completion of this game */

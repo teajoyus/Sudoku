@@ -9,7 +9,7 @@ public class Music {
    /** Stop old song and start new one */
    
    public static void play(Context context, int resource) {
-      stop(context);
+      stop();
 
       // Start music only if not disabled in preferences
       if (Prefs.getMusic(context)) {
@@ -21,7 +21,7 @@ public class Music {
    
 
    /** Stop the music */
-   public static void stop(Context context) { 
+   public static void stop() {
       if (mp != null) {
          mp.stop();
          mp.release();
