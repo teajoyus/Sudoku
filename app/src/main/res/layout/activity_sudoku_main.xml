@@ -1,49 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_background"
     android:paddingLeft="48dp"
-    android:paddingRight="48dp"
-    android:orientation="vertical"
-    android:layout_gravity="center">
+    android:paddingRight="48dp">
 
-    <TextView
-        android:text="@string/sudoku_title"
-        android:textSize="30sp"
-        android:textColor="@color/sudoku_title"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:orientation="vertical"
         android:layout_gravity="center"
-        android:paddingTop="80dp"/>
-    <TextView
-        android:text="@string/sudoku_sub_title"
-        android:textSize="15sp"
-        android:textColor="@color/sudoku_sub_title"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"/>
-    <Button
-        android:id="@+id/button_continue_game"
-        style="@style/CustomButton_for_MainMenu"
-        android:text="@string/sudoku_continue_game"/>
-    <Button
-        android:id="@+id/button_new_game"
-        style="@style/CustomButton_for_MainMenu"
-        android:text="@string/sudoku_new_game"/>
-    <Button
-        android:id="@+id/button_stage_mode"
-        style="@style/CustomButton_for_MainMenu"
-        android:text="@string/sudoku_stage_mode"/>
-    <Button
-        android:id="@+id/button_about"
-        style="@style/CustomButton_for_MainMenu"
-        android:text="@string/sudoku_about"/>
-    <Button
-        android:id="@+id/button_exit"
-        style="@style/CustomButton_for_MainMenu"
-        android:text="@string/sudoku_exit"/>
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:text="@string/sudoku_title"
+            android:textSize="30sp"
+            android:textColor="@color/sudoku_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"/>
+        <TextView
+            android:text="@string/sudoku_sub_title"
+            android:textSize="15sp"
+            android:textColor="@color/sudoku_sub_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"/>
+        <Button
+            android:id="@+id/button_continue_game"
+            style="@style/CustomButton_for_MainMenu"
+            android:text="@string/sudoku_continue_game"/>
+        <Button
+            android:id="@+id/button_new_game"
+            style="@style/CustomButton_for_MainMenu"
+            android:text="@string/sudoku_new_game"/>
+        <Button
+            android:id="@+id/button_stage_mode"
+            style="@style/CustomButton_for_MainMenu"
+            android:text="@string/sudoku_stage_mode"/>
+        <Button
+            android:id="@+id/button_about"
+            style="@style/CustomButton_for_MainMenu"
+            android:text="@string/sudoku_about"/>
+        <Button
+            android:id="@+id/button_exit"
+            style="@style/CustomButton_for_MainMenu"
+            android:text="@string/sudoku_exit"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
