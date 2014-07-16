@@ -2,7 +2,6 @@ package com.hat_cloud.sudoku;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,21 +20,21 @@ public class SudokuMain extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku_main);
 
-        //为所有按钮设置一个监听器
+        //---Set listener for all buttons---
         View continueButton = findViewById(R.id.button_continue_game);
-        continueButton.setOnClickListener((OnClickListener) this);
+        continueButton.setOnClickListener(this);
 
         View startNewGameButton = findViewById(R.id.button_new_game);
-        startNewGameButton.setOnClickListener((OnClickListener) this);
+        startNewGameButton.setOnClickListener(this);
 
         View rankListButton = findViewById(R.id.button_stage_mode);
-        rankListButton.setOnClickListener((OnClickListener) this);
+        rankListButton.setOnClickListener(this);
 
         View aboutButton = findViewById(R.id.button_about);
-        aboutButton.setOnClickListener( this);
+        aboutButton.setOnClickListener(this);
 
         View exitButton = findViewById(R.id.button_exit);
-        exitButton.setOnClickListener((OnClickListener) this);
+        exitButton.setOnClickListener(this);
 
     }
 
@@ -73,13 +72,13 @@ public class SudokuMain extends Activity implements OnClickListener{
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        item.getItemId();
 
         return super.onOptionsItemSelected(item);
     }
 
 
-    //---Show the Difficulty of game to select----
+    //---Show the difficulty of game to select----
     private static final String TAG = "Sudoku";
     private void openNewGameDialog(){
         new AlertDialog.Builder(this)
@@ -106,7 +105,7 @@ public class SudokuMain extends Activity implements OnClickListener{
     @Override
     protected void onPause() {
         super.onPause();
-        Music.stop(this);
+        Music.stop();
     }
 
     @Override

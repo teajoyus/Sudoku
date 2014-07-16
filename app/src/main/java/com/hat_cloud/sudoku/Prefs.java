@@ -2,7 +2,6 @@ package com.hat_cloud.sudoku;
 
 import android.app.ActionBar;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -25,8 +24,11 @@ public class Prefs extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.settings);
 		
 		ActionBar actionBar=getActionBar();
-        actionBar.show();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.show();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 	}
 
 	
