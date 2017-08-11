@@ -191,6 +191,7 @@ public class BaseActivity extends Activity {
             case BlueMessage.HEADER_PK_STOP:
                 onPKStop();
                 break;
+
         }
 
     }

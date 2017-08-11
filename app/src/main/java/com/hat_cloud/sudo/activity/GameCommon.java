@@ -1,21 +1,26 @@
 package com.hat_cloud.sudo.activity;
 
+import android.animation.Animator;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hat_cloud.sudo.chat.ChatActivity;
 import com.hat_cloud.sudo.entry.BlueMessage;
 import com.hat_cloud.sudo.entry.Music;
 import com.hat_cloud.sudo.iface.IGame;
@@ -35,12 +40,16 @@ public class GameCommon extends BaseActivity implements IGame {
     public static final String TAG_GameCommon = "Sudoku";
     protected int puzzle[];
     protected int initPuzzle[];
+    protected int helpPuzzle[];
     protected PuzzleView puzzleView;
     protected boolean tip;
     protected int diff;
     protected int type;
+    protected int time;
     protected String name;
     protected CalcTimeTextView time_tv;
+    protected TextView unRead;
+    protected ImageView chat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getIntent().putExtra("no", "no");//表示让BaseActivity不要去打开蓝牙服务端
@@ -52,16 +61,21 @@ public class GameCommon extends BaseActivity implements IGame {
         initView();//初始化布局
 
         for (int i=0;i<puzzle.length;i++){
-            System.out.print(puzzle[i]+"\t");
+            System.out.print(puzzle[i]+",");
         }
         System.out.println("");
         for (int i=0;i<initPuzzle.length;i++){
-            System.out.print(initPuzzle[i]+"\t");
+            System.out.print(initPuzzle[i]+",");
         }
         System.out.println("");
+        test();
+    }
+    private void test(){
+        BlueMessage blueMessage = new BlueMessage(BlueMessage.HEADER_CHAT_MESSAGE);
+        blueMessage.put("chat", SystemClock.uptimeMillis()+"");
+        onReceiveChat(blueMessage);
 
     }
-
     /**
      * 初始化棋盘数据
      */
@@ -83,6 +97,7 @@ public class GameCommon extends BaseActivity implements IGame {
                 -1);
         name = getIntent().getStringExtra(BLUE_NAME);
         tip = getIntent().getBooleanExtra(IGame.BLUE_TIP_PK,false);
+        time = getIntent().getIntExtra(PREF_TIME,0);
     }
 
     /**
@@ -97,10 +112,37 @@ public class GameCommon extends BaseActivity implements IGame {
         if(type!=-1) {
             type_tv.setVisibility(View.VISIBLE);
             time_tv.setVisibility(View.VISIBLE);
+            if(time!=0){
+                time_tv.setTime(time);
+            }
         }
 
         initActionBar();//初始化标题
         initPuzzleView();//初始化puzzle布局
+        if(type!=-1) {
+            chat = (ImageView) findViewById(R.id.chat);
+            unRead = (TextView) findViewById(R.id.unread);
+            chat.setVisibility(View.VISIBLE);
+            gotoChatListener();
+        }
+    }
+
+    /**
+     * 点击进入聊天界面
+     */
+    protected void gotoChatListener(){
+        showToast("222");
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GameCommon.this, ChatActivity.class);
+                startActivity(intent);
+                showToast("222222");
+                unRead.setText("0");
+                unRead.setVisibility(View.INVISIBLE);
+            }
+        });
+
     }
     /**
      * 初始化标题
@@ -110,7 +152,11 @@ public class GameCommon extends BaseActivity implements IGame {
         actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.show();
+            actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            if(name!=null){
+                actionBar.setTitle("\t\t\t\t"+getResources().getString(R.string.pk_with_name).replace("XXX",name));
+            }
         }
     }
     /**
@@ -526,7 +572,10 @@ public class GameCommon extends BaseActivity implements IGame {
     }
 
     @Override
-    public boolean isTrue(int trueType,int i,int j) {
+    public boolean isTrue(int trueType,int x,int y) {
+        if(IGame.GAME_PK_HELP==trueType){
+            return helpPuzzle!=null&&helpPuzzle[y * 9 + x]!=0;
+        }
         return false;
     }
 
@@ -553,7 +602,11 @@ public class GameCommon extends BaseActivity implements IGame {
     }
 
     @Override
-    public Object getData(int i, int j) {
+    public Object getData(int type,int x, int y) {
+        //如果是帮助的话就返回帮助的参考数字
+        if(type ==IGame.GAME_PK_HELP){
+            return String.valueOf(helpPuzzle[y*9+x]);
+        }
         return null;
     }
 
@@ -578,8 +631,10 @@ public class GameCommon extends BaseActivity implements IGame {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_REQ_HELP);
-                        msg.put(IGame.PREF_PUZZLE,toPuzzleString(puzzle));
-                        msg.put(IGame.PREF_INIT_PUZZLE,toPuzzleString(initPuzzle));
+                        int p[] = new int[]{0,0,5,0,0,8,2,1,0,6,2,0,7,0,0,4,4,0,7,0,9,3,4,5,6,3,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
+                        int init_p[] = new int[]{0,0,5,0,0,8,0,1,0,6,2,0,7,0,0,0,4,0,7,0,9,3,4,5,6,0,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
+                        msg.put(IGame.PREF_PUZZLE,toPuzzleString(p));
+                        msg.put(IGame.PREF_INIT_PUZZLE,toPuzzleString(init_p));
                         CalcTimeTextView tv = (CalcTimeTextView) findViewById(R.id.time_tv);
                         msg.put(IGame.PREF_TIME,tv.getTime());
                         send(msg);
@@ -618,6 +673,33 @@ public class GameCommon extends BaseActivity implements IGame {
         builder2.show();
 
     }
+
+    /**
+     * 收到对方在帮助的时候发过来的参考数字
+     * @param msg
+     */
+    protected void onHelpRefer(BlueMessage msg){
+        int value = (Integer) msg.get("value");
+        int x = (Integer) msg.get("x");
+        int y = (Integer) msg.get("y");
+        if(helpPuzzle==null){
+            helpPuzzle = new int[puzzle.length];
+        }
+        helpPuzzle[y * 9 + x] = value;
+        puzzleView.invalidate();//刷新页面
+    }
+    protected  void onReceiveChat(BlueMessage msg){
+        //将消息添加到列表中
+        ChatActivity.addTargetMessage((String) msg.get("chat"));
+        int num = Integer.parseInt(unRead.getText().toString());
+        unRead.setText(String.valueOf(num+1));
+        unRead.setVisibility(View.VISIBLE);
+        unRead.setScaleX(1.3f);
+        unRead.setScaleY(1.3f);
+        //未读消息的动画
+        unRead.animate().scaleX(1.0f).scaleY(1.0f).setDuration(500).setListener(new unReadAnimatorListener());
+
+    }
     @Override
     protected void receive(BlueMessage msg) {
         super.receive(msg);
@@ -630,6 +712,37 @@ public class GameCommon extends BaseActivity implements IGame {
             case BlueMessage.HEADER_PK_REQ_HELP:
                 onPKEndRequestHelp( msg);
                 break;
+            case BlueMessage.HEADER_HELP_REFER:
+                onHelpRefer(msg);
+                break;
+            case BlueMessage.HEADER_CHAT_MESSAGE:
+                onReceiveChat(msg);
+
+        }
+    }
+    class unReadAnimatorListener implements Animator.AnimatorListener{
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            if(unRead.getScaleX()-1.0f<0.1f){
+                unRead.animate().scaleX(1.3f).scaleY(1.3f).setDuration(500);
+            }else{
+                unRead.animate().scaleX(1.0f).scaleY(1.0f).setDuration(500);
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
 
         }
     }

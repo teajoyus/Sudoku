@@ -156,27 +156,37 @@ public class PuzzleView extends View {
                          getRect(i, j, r);
                         pk.setColor(getResources().getColor(R.color.puzzle_hint_3));
                          canvas.drawRect(r, pk);
-                     /*****************/
-                    //如果是交流类型的话，则额外要绘制每个方格里面的参考数字，如果方格还没有确定数字的话
-                 }else if(game.getType()==IGame.GAME_PK_TCOMMUNICATION&&game.isTrue(IGame.GAME_PK_COMPERTITION,i,j)) {
+
+                   /**如果是交流类型的话，则额外要绘制每个方格里面的参考数字，如果方格还没有确定数字的话*/
+                 }else if(game.getType()==IGame.GAME_PK_TCOMMUNICATION&&game.isTrue(IGame.GAME_PK_TCOMMUNICATION,i,j)) {
                         Paint prefence = new Paint(Paint.ANTI_ALIAS_FLAG);
                         prefence.setColor(getResources().getColor(
                                 R.color.puzzle_foreground));
                         prefence.setStyle(Style.FILL);
-                        prefence.setTextSize(foreground.getTextSize()/3);
+                        prefence.setTextSize(foreground.getTextSize() / 3);
                         prefence.setTextScaleX(width / height);
                         prefence.setTextAlign(Paint.Align.CENTER);
-                        int paddingX = (int) (x/1.9);
-                        int paddingY = (int) (y/2.5);
-                        int[][] arr = (int[][]) game.getData(i,j);
-                        for(int ii = 0;ii < 3; ii++){
-                            for(int jj = 0;jj < 3; jj++){
-                                if(arr[jj][ii]==0)continue;
-                                canvas.drawText(jj*3+(ii+1)+"", i
-                                        * width + leftPadding+ paddingX*(ii+1) , j * height +  topPadding+ paddingY*(jj+1), prefence);
+                        int paddingX = (int) (x / 1.9);
+                        int paddingY = (int) (y / 2.5);
+                        int[][] arr = (int[][]) game.getData(IGame.GAME_PK_TCOMMUNICATION,i, j);
+                        for (int ii = 0; ii < 3; ii++) {
+                            for (int jj = 0; jj < 3; jj++) {
+                                if (arr[jj][ii] == 0) continue;
+                                canvas.drawText(jj * 3 + (ii + 1) + "", i
+                                        * width + leftPadding + paddingX * (ii + 1), j * height + topPadding + paddingY * (jj + 1), prefence);
                             }
 
                         }
+                     //如果是帮助类型的话，就需要绘制帮助中的参考数字
+                    }else if(game.isTrue(IGame.GAME_PK_HELP,i,j)){
+                        //先绘制背景颜色
+                        Paint pk = new Paint(Paint.ANTI_ALIAS_FLAG);
+                        getRect(i, j, r);
+                        pk.setColor(getResources().getColor(R.color.puzzle_hint_3));
+                        canvas.drawRect(r, pk);
+                        String value  = (String)game.getData(IGame.GAME_PK_HELP,i,j);
+                        canvas.drawText(value, i
+                                * width + leftPadding + x, j * height + y + topPadding, foreground);
 
                     }else {
                      canvas.drawText(this.game.getTileString(i, j), i

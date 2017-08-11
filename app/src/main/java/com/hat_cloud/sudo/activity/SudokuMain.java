@@ -99,11 +99,25 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
                         })
                 .show();
     }
+    private void startGame2(int i) {
+        Log.d(TAG, "clicked on " + i);
+        Intent intent = new Intent(this, GamePKHelp.class);
+        int p[] = new int[]{0,0,5,0,0,8,2,1,0,6,2,0,7,0,0,4,4,0,7,0,9,3,4,5,6,3,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
+        int init_p[] = new int[]{0,0,5,0,0,8,0,1,0,6,2,0,7,0,0,0,4,0,7,0,9,3,4,5,6,0,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
+        intent.putExtra(IGame.KEY_DIFFICULTY, IGame.DIFFICULTY_BY_BLUE);
+        intent.putExtra(IGame.BLUE_NAME, "iphone 7");
+        intent.putExtra(IGame.BLUE_TYPE_PK, 2);
+        intent.putExtra(IGame.BLUE_TIP_PK, true);
+        intent.putExtra(IGame.PREF_TIME, 1234);
+        intent.putExtra(IGame.PREF_PUZZLE, GameCommon.toPuzzleString(p));
+        intent.putExtra(IGame.PREF_INIT_PUZZLE,  GameCommon.toPuzzleString(init_p));
+        startActivity(intent);
+    }
     private void startGame(int i) {
         Log.d(TAG, "clicked on " + i);
         Intent intent = new Intent(this, GamePKCommunication.class);
         intent.putExtra(IGame.KEY_DIFFICULTY, i);
-        intent.putExtra(IGame.BLUE_NAME, "");
+        intent.putExtra(IGame.BLUE_NAME, "iphone 7");
         intent.putExtra(IGame.BLUE_TYPE_PK, 2);
         intent.putExtra(IGame.BLUE_TIP_PK, true);
         startActivity(intent);

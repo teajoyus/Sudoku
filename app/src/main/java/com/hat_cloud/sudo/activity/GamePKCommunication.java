@@ -91,7 +91,7 @@ public class GamePKCommunication extends GameCommon {
         referPuzzle[y][x][value -1 ] = value;
     }
     @Override
-    public Object getData(int x, int y) {
+    public Object getData(int type,int x, int y) {
         return getReferPuzzle(x, y);
     }
 

@@ -30,6 +30,13 @@ public class BlueMessage implements Serializable{
     public static final int HEADER_COMPERTITION_NUMBER= 0x1001;//竞赛过程中 对方输入的数字的消息
 
     public static final int HEADER_COMMUNICATION_REFER= 0x3001;//交流类型时收到对方发过来的参考数字
+
+    public static final int HEADER_HELP_REFER= 0x4001;//帮助时收到对方发过来的参考数字
+
+    public static final int HEADER_CHAT_MESSAGE= 0x5001;//聊天消息
+
+
+
     private int type;//消息类型
     private List<String> list;
     private Map<String, Object> map;

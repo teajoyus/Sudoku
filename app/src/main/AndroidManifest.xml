@@ -44,7 +44,9 @@
         <activity
             android:name="com.hat_cloud.sudo.activity.GamePKCommunication"
             android:label="@string/title_activity_game" />
-
+        <activity
+            android:name="com.hat_cloud.sudo.activity.GamePKHelp"
+            android:label="@string/title_activity_game" />
         <activity
             android:name="com.hat_cloud.sudo.activity.BlueActivity"
             android:label="@string/title_activity_blue" />
@@ -53,10 +55,7 @@
             android:name="com.hat_cloud.sudo.task.TaskService"
             android:enabled="true"
             android:exported="true" />
-
-        <activity
-            android:name="com.hat_cloud.sudo.activity.MainActivity"
-            android:label="@string/title_activity_main"></activity>
+<activity android:name="com.hat_cloud.sudo.chat.ChatActivity"></activity>
     </application>
 
 </manifest>

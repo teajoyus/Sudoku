@@ -288,7 +288,7 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 tip = (i==0);
-                requestPK(device.getName(),diff,type,tip);//选完后发起挑战
+                requestPK(mBluetoothAdapter.getName(),diff,type,tip);//选完后发起挑战
                 dialogInterface.dismiss();
             }
         });
@@ -353,6 +353,7 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
         intent.putExtra(IGame.KEY_DIFFICULTY, diff);
         intent.putExtra(IGame.BLUE_NAME, device.getName());
         intent.putExtra(IGame.BLUE_TYPE_PK, type);
+        intent.putExtra(IGame.BLUE_TIP_PK, tip);
         startActivity(intent);
     }
 }

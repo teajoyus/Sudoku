@@ -75,7 +75,6 @@
     <string name="blue_item_bond_success">配对成功</string>
     <string name="blue_item_bond_faild">配对失败</string>
     <string name="blue_connect_finish">蓝牙搜索完成</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="blue_name">玩家名字</string>
     <string name="blue_address">玩家地址</string>
     <string name="blue_state">配对情况</string>
@@ -86,6 +85,8 @@
     <string name="choose_diff">请选择难度：</string>
     <string name="tip">提示</string>
     <string name="no_tip">不提示</string>
+    <string name="pk_with_name">与XXX对战中</string>
+    <string name="help_with_name">为XXX进行帮助</string>
     <string name="no_pk">对方拒绝了挑战</string>
     <string name="start_pk">对方接受了您发起的挑战</string>
     <string name="pk_type">请选择对战类型：</string>
@@ -98,4 +99,8 @@
 
     <string name="clear">清空</string>
     <string name="clear_all">全部清空</string>
+
+    <string name="chat_empty">聊天内容为空，您还没有写内容</string>
+
+
 </resources>
