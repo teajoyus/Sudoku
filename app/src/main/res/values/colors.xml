@@ -17,6 +17,7 @@
     <color name="puzzle_hint_0">#64FF0000</color>
     <color name="puzzle_hint_1">#64FFA843</color>
     <color name="puzzle_hint_2">#64FFE32A</color>
+    <color name="puzzle_hint_3">#FF0000</color>
     <color name="puzzle_selected">#644DB849</color>
 
     <color name="keypad_text">#FFFFFF</color>

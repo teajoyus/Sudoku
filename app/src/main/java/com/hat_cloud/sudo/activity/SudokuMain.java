@@ -1,19 +1,21 @@
-package com.hat_cloud.sudoku;
+package com.hat_cloud.sudo.activity;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.app.Activity;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import com.hat_cloud.sudo.entry.Music;
+import com.hat_cloud.sudo.iface.IGame;
+import com.hat_cloud.sudoku.R;
 
 
-public class SudokuMain extends Activity implements OnClickListener{
+public class SudokuMain extends BaseActivity implements OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +25,7 @@ public class SudokuMain extends Activity implements OnClickListener{
         //---Set listener for all buttons---
         View continueButton = findViewById(R.id.button_continue_game);
         continueButton.setOnClickListener(this);
-
+        continueButton.setVisibility(View.GONE);
         View startNewGameButton = findViewById(R.id.button_new_game);
         startNewGameButton.setOnClickListener(this);
 
@@ -47,6 +49,10 @@ public class SudokuMain extends Activity implements OnClickListener{
 
             case R.id.button_new_game:
                 openNewGameDialog();
+                break;
+            case R.id.button_stage_mode:
+                Intent intent = new Intent(this,BlueActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_about:
@@ -95,8 +101,11 @@ public class SudokuMain extends Activity implements OnClickListener{
     }
     private void startGame(int i) {
         Log.d(TAG, "clicked on " + i);
-        Intent intent = new Intent(this, Game.class);
-        intent.putExtra(Game.KEY_DIFFICULTY, i);
+        Intent intent = new Intent(this, GamePKCommunication.class);
+        intent.putExtra(IGame.KEY_DIFFICULTY, i);
+        intent.putExtra(IGame.BLUE_NAME, "");
+        intent.putExtra(IGame.BLUE_TYPE_PK, 2);
+        intent.putExtra(IGame.BLUE_TIP_PK, true);
         startActivity(intent);
     }
 
@@ -111,7 +120,8 @@ public class SudokuMain extends Activity implements OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        Music.play(this, R.raw.main);
+       // Music.play(this, R.raw.main);
 
     }
+
 }

@@ -1,4 +1,4 @@
-package com.hat_cloud.sudoku;
+package com.hat_cloud.sudo.activity;
 
 
 import java.util.ArrayList;
@@ -20,7 +20,13 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class Game extends Activity {
+import com.hat_cloud.sudo.iface.IGame;
+import com.hat_cloud.sudo.view.Keypad;
+import com.hat_cloud.sudo.entry.Music;
+import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.R;
+
+public class Game extends GameCommon implements IGame{
 	   private static final String TAG = "Sudoku";
 
 	   public static final String KEY_DIFFICULTY =
@@ -31,10 +37,10 @@ public class Game extends Activity {
 	   
 	   private static final String PREF_PUZZLE = "puzzle" ;
 	   private static final String PREF_INIT_PUZZLE = "initPuzzle";
-	   protected static final int DIFFICULTY_CONTINUE = -1;
+	   public static final int DIFFICULTY_CONTINUE = -1;
 	   
-	   protected int puzzle[];
-	   protected int initPuzzle[];
+	   public int puzzle[];
+	   public int initPuzzle[];
 
     private PuzzleView puzzleView;
 	      
@@ -42,7 +48,7 @@ public class Game extends Activity {
 
 
 	   @Override
-	   protected void onCreate(Bundle savedInstanceState) {
+	   public void onCreate(Bundle savedInstanceState) {
 	      super.onCreate(savedInstanceState);
 	      Log.d(TAG, "onCreate");
 	      
@@ -51,9 +57,9 @@ public class Game extends Activity {
 	      puzzle = getPuzzle(diff);
 	      
 	      calculateUsedTiles();
-	      puzzleView = new PuzzleView(this);
+	      puzzleView = new PuzzleView(this,this);
 	      setContentView(R.layout.activity_game);
-	      
+
 	      ActionBar actionBar;
           actionBar = getActionBar();
           if (actionBar != null) {
@@ -66,7 +72,14 @@ public class Game extends Activity {
 	      mLayout.addView(puzzleView);
 	      
 	      puzzleView.requestFocus();
-	      
+	      for (int i=0;i<puzzle.length;i++){
+			  System.out.print(puzzle[i]+"\t");
+		  }
+		   System.out.println("");
+	      for (int i=0;i<initPuzzle.length;i++){
+			  System.out.print(initPuzzle[i]+"\t");
+		  }
+		   System.out.println("");
 	      getIntent().putExtra(KEY_DIFFICULTY, DIFFICULTY_CONTINUE);
 	   }
 	   
@@ -93,7 +106,7 @@ public class Game extends Activity {
 		}
 	   
 	   @Override
-		protected void onResume() {
+		public void onResume() {
 		
 			super.onResume();
 			Music.play(this, R.raw.game);
@@ -101,7 +114,7 @@ public class Game extends Activity {
 		}
 	   
 	   @Override
-	   protected void onPause() {    
+	   public void onPause() {    
 		   super.onPause();    
 		   Log.d(TAG, "onPause" );    
 		   Music.stop();
@@ -204,7 +217,7 @@ public class Game extends Activity {
 	   }
 
 	   /** Convert an array into a puzzle string */
-	   static protected String toPuzzleString(int[] puz) {
+	   static public String toPuzzleString(int[] puz) {
 	      StringBuilder buf = new StringBuilder();
 	      for (int element : puz) {
 	         buf.append(element);
@@ -213,7 +226,7 @@ public class Game extends Activity {
 	   }
 	  
 	   /** Convert a puzzle string into an array */
-	   static protected int[] fromPuzzleString(String string) {
+	   static public int[] fromPuzzleString(String string) {
 	      int[] puz = new int[string.length()];
 	      for (int i = 0; i < puz.length; i++) {
 	         puz[i] = string.charAt(i) - '0';
@@ -222,26 +235,26 @@ public class Game extends Activity {
 	   }
 
 	   /** Return the tile at the given coordinates */
-	   private int getTile(int x, int y) {
+	   public int getTile(int x, int y) {
 	      return puzzle[y * 9 + x];
 	   }
 	   /** Change the tile at the given coordinates */
 
-	   private void setTile(int x, int y, int value) {
+	   public void setTile(int x, int y, int value) {
 	      puzzle[y * 9 + x] = value;
 	   }
-
+        @Override
 	   /** Return a string for the tile at the given coordinates */
-	   protected String getTileString(int x, int y) {
+	   public String getTileString(int x, int y) {
 	      int v = getTile(x, y);
 	      if (v == 0)
 	         return "";
 	      else
 	         return String.valueOf(v);
 	   }
-
+    @Override
 	   /** Change the tile only if it's a valid move */
-	   protected boolean setTileIfValid(int x, int y, int value) {
+	   public boolean setTileIfValid(int x, int y, int value) {
 	      int tiles[] = getUsedTiles(x, y);
 	      if (value != 0) {
 	         for (int tile : tiles) {
@@ -253,22 +266,22 @@ public class Game extends Activity {
 	      calculateUsedTiles();
 	      return true;
 	   }
-
-	   protected boolean isInitNumber(int x, int y) {
+        @Override
+	   public boolean isInitNumber(int x, int y) {
            return initPuzzle[y * 9 + x] != 0;
 		   }
-	   
+    @Override
 	   /** Judge that whether the completion of this game */
-	   protected boolean isWon(){
+	   public boolean isWon(){
 		   for(int i : puzzle){
 			   if( i == 0)
 				   return false;
 		   }
 		   return true;
 	   }
-	   
+    @Override
 	   /** Congratulations to the game player */
-	   protected void Congratulations(){
+	   public void Congratulations(){
 		   Builder builder = new AlertDialog.Builder(this);
 		   builder.setIcon(R.drawable.prize);
 		   builder.setTitle(getResources().getString(R.string.Congratulations_text));
@@ -299,9 +312,25 @@ public class Game extends Activity {
 		   builder.show();
 		   
 	   }
-	   
+
+    @Override
+    public int[] getPuzzle() {
+        return puzzle;
+    }
+
+    @Override
+    public int[] getInitPuzzle() {
+        return initPuzzle;
+    }
+
+	@Override
+	public boolean allowTip() {
+		return true;
+	}
+
+	@Override
 	   /** Open the keypad if there are any valid moves */
-	   protected void showKeypadOrError(int x, int y) {
+	   public void showKeypadOrError(int x, int y) {
 	      int tiles[] = getUsedTiles(x, y);
 	      if (tiles.length == 9) {
 	         Toast toast = Toast.makeText(this,
@@ -317,14 +346,14 @@ public class Game extends Activity {
 
 	   /** Cache of used tiles */
 	   private final int used[][][] = new int[9][9][];
-
+    @Override
 	   /** Return cached used tiles visible from the given coords */
-	   protected int[] getUsedTiles(int x, int y) {
+	   public int[] getUsedTiles(int x, int y) {
 	      return used[x][y];
 	   }
 
 	   /** Compute the two dimensional array of used tiles */
-	   private void calculateUsedTiles() {
+	   public void calculateUsedTiles() {
 	      for (int x = 0; x < 9; x++) {
 	         for (int y = 0; y < 9; y++) {
 	            used[x][y] = calculateUsedTiles(x, y);
@@ -336,7 +365,7 @@ public class Game extends Activity {
 
 	   
 	   /** Compute the used tiles visible from this position */
-	   private int[] calculateUsedTiles(int x, int y) {
+	   public int[] calculateUsedTiles(int x, int y) {
 	      int c[] = new int[9];
 	      // horizontal
 	      for (int i = 0; i < 9; i++) { 

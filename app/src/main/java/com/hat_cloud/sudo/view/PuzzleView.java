@@ -1,4 +1,4 @@
-package com.hat_cloud.sudoku;
+package com.hat_cloud.sudo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,10 +13,22 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
+
+import com.hat_cloud.sudo.activity.BaseActivity;
+import com.hat_cloud.sudo.activity.Game;
+import com.hat_cloud.sudo.activity.GamePKCommunication;
+import com.hat_cloud.sudo.activity.GamePKCompertition;
+import com.hat_cloud.sudo.activity.Prefs;
+import com.hat_cloud.sudo.entry.BlueMessage;
+import com.hat_cloud.sudo.entry.Test;
+import com.hat_cloud.sudo.iface.IGame;
+import com.hat_cloud.sudoku.R;
 
 
 public class PuzzleView extends View {
     private static final String TAG = "Sudoku";
+
 
     private float width;    // width of one tile
     private float height;   // height of one tile
@@ -24,10 +36,10 @@ public class PuzzleView extends View {
     private int selY;       // Y index of selection
     private final Rect selRect = new Rect();
 
-    private final Game game;
-    public PuzzleView(Context context) {
+    private final IGame game;
+    public PuzzleView(Context context,IGame game) {
         super(context);
-        this.game = (Game) context;
+        this.game = game;
         setFocusable(true);
         setFocusableInTouchMode(true);
     }
@@ -137,8 +149,39 @@ public class PuzzleView extends View {
                           * width + leftPadding + x, j * height + y + topPadding, foregroundInit);
              }
              else{
-                 canvas.drawText(this.game.getTileString(i, j), i
-                      * width + leftPadding + x, j * height + y + topPadding, foreground);
+                 /** 如果是竞赛类型，并且是对方已经输入的数字的话，那么就是显示固定的颜色*/
+                    if(game.getType()==IGame.GAME_PK_COMPERTITION&&game.isTrue(IGame.GAME_PK_COMPERTITION,i,j)){
+                         Log.i(TAG, "onDraw: isPKNumber:"+i+":"+j);
+                         Paint pk = new Paint(Paint.ANTI_ALIAS_FLAG);
+                         getRect(i, j, r);
+                        pk.setColor(getResources().getColor(R.color.puzzle_hint_3));
+                         canvas.drawRect(r, pk);
+                     /*****************/
+                    //如果是交流类型的话，则额外要绘制每个方格里面的参考数字，如果方格还没有确定数字的话
+                 }else if(game.getType()==IGame.GAME_PK_TCOMMUNICATION&&game.isTrue(IGame.GAME_PK_COMPERTITION,i,j)) {
+                        Paint prefence = new Paint(Paint.ANTI_ALIAS_FLAG);
+                        prefence.setColor(getResources().getColor(
+                                R.color.puzzle_foreground));
+                        prefence.setStyle(Style.FILL);
+                        prefence.setTextSize(foreground.getTextSize()/3);
+                        prefence.setTextScaleX(width / height);
+                        prefence.setTextAlign(Paint.Align.CENTER);
+                        int paddingX = (int) (x/1.9);
+                        int paddingY = (int) (y/2.5);
+                        int[][] arr = (int[][]) game.getData(i,j);
+                        for(int ii = 0;ii < 3; ii++){
+                            for(int jj = 0;jj < 3; jj++){
+                                if(arr[jj][ii]==0)continue;
+                                canvas.drawText(jj*3+(ii+1)+"", i
+                                        * width + leftPadding+ paddingX*(ii+1) , j * height +  topPadding+ paddingY*(jj+1), prefence);
+                            }
+
+                        }
+
+                    }else {
+                     canvas.drawText(this.game.getTileString(i, j), i
+                             * width + leftPadding + x, j * height + y + topPadding, foreground);
+                 }
              }
 
          }
@@ -177,7 +220,7 @@ public class PuzzleView extends View {
 
 
 
-      if(Prefs.getHints(getContext())){
+      if(Prefs.getHints(getContext())&& (Test.TEST||game.allowTip()) ){
           // Draw the hints...
           // Pick a hint color based on #moves left
           Paint hint = new Paint();
@@ -213,14 +256,27 @@ public class PuzzleView extends View {
 
 
     }
-
-
+    private long down_time,up_time;
+    private static final int DELAYED_TIME = 200;
     @SuppressWarnings("all")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-      if (event.getAction() != MotionEvent.ACTION_DOWN)
-         return super.onTouchEvent(event);
+        Log.i(TAG, "onTouchEvent event: "+event);
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            down_time = event.getEventTime();
+            return true;
+        }
 
+        up_time = event.getEventTime();
+        if(down_time==0){
+            return super.onTouchEvent(event);
+        }
+        if (event.getAction() == MotionEvent.ACTION_MOVE&&(up_time-down_time)<1000L) {
+          return super.onTouchEvent(event);
+      }
+      if(event.getAction() == MotionEvent.ACTION_MOVE&&down_time==0){
+          return super.onTouchEvent(event);
+      }
       float topPadding = Math.abs(getWidth() - getHeight())/2;
       float leftPadding = Math.abs(getWidth() - getHeight())/2;
       if(getWidth() > getHeight())
@@ -236,9 +292,19 @@ public class PuzzleView extends View {
 
       select((int) (x / width),
             (int) (y / height));
-      if(!game.isInitNumber(selX, selY))
-          game.showKeypadOrError(selX, selY);
+        //如果长按2秒的话认为是长按事件
+        if(up_time - down_time > 1000L){
+            //TODO
+            if(!game.hasNumber(selX,selY)){
+                game.confirmTile(selX,selY);
+
+            }
+        }else {
+            if (!game.isInitNumber(selX, selY))
+                game.showKeypadOrError(selX, selY);
+        }
       Log.d(TAG, "onTouchEvent: x " + selX + ", y " + selY);
+        down_time = 0L;
       return true;
     }
 
@@ -286,9 +352,17 @@ public class PuzzleView extends View {
       return true;
     }
 	   
+    public void clearTile(){
+        game.clearTile(selX,selY);
+    }
+    public void clearAllTile(){
+        game.clearAllTile();
+    }
 
-	   
     public void setSelectedTile(int tile) {
+        Log.i(TAG,"selX:"+selX);
+        Log.i(TAG,"selY:"+selY);
+        Log.i(TAG,"tile:"+tile);
       if (game.setTileIfValid(selX, selY, tile)) {
          invalidate();// may change hints
       } else {
@@ -296,14 +370,16 @@ public class PuzzleView extends View {
 
          Log.d(TAG, "setSelectedTile: invalid: " + tile);
 
-         startAnimation(AnimationUtils.loadAnimation(game,
+         startAnimation(AnimationUtils.loadAnimation((Context) game,
                R.anim.shake));
+          Toast.makeText((Context) game,getResources().getString(R.string.invalid_toast).replace("XXX",tile+""),Toast.LENGTH_SHORT).show();
+          return;
       }
       if(game.isWon()){
           game.Congratulations();
       }
-      Log.d("debug", "puz:" + Game.toPuzzleString(game.puzzle));
-      Log.d("debug", "initpuz:" + Game.toPuzzleString(game.initPuzzle));
+      Log.d("debug", "puz:" + Game.toPuzzleString(game.getPuzzle()));
+      Log.d("debug", "initpuz:" + Game.toPuzzleString(game.getInitPuzzle()));
     }
 
 

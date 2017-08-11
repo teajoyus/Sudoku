@@ -9,7 +9,33 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Game" >
+    tools:context="com.hat_cloud.sudo.activity.Game" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:textColor="#ffffff"
+            android:text="@string/pk_type_comm"
+            android:visibility="invisible"
+            />
+        <com.hat_cloud.sudo.view.CalcTimeTextView
+            android:id="@+id/time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#afffffff"
+            android:textSize="22sp"
+            android:visibility="invisible"
+            />
+
+    </LinearLayout>
 
     <!-- <TextView
         android:id="@+id/game_timerText"

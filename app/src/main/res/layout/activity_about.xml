@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:padding="10dp"
-    tools:context=".About" >
+    tools:context="com.hat_cloud.sudo.activity.About" >
 
     <TextView
         android:id="@+id/about_text"

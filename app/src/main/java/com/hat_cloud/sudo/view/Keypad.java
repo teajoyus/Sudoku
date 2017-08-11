@@ -1,4 +1,4 @@
-package com.hat_cloud.sudoku;
+package com.hat_cloud.sudo.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -6,15 +6,24 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.hat_cloud.sudo.activity.Game;
+import com.hat_cloud.sudo.activity.Prefs;
+import com.hat_cloud.sudo.entry.Test;
+import com.hat_cloud.sudo.iface.IGame;
+import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.R;
+
 public class Keypad extends Dialog {
 
    private final View keys[] = new View[9];
+   private  View clear,clearAll;
    private View keypad;
    private final int useds[];
    private final PuzzleView puzzleView;
-
+   private  Context context;
    public Keypad(Context context, int useds[], PuzzleView puzzleView) {
       super(context);
+      this.context = context;
       this.useds = useds;
       this.puzzleView = puzzleView;
    }
@@ -26,12 +35,13 @@ public class Keypad extends Dialog {
       setTitle(R.string.keypad_title);
       setContentView(R.layout.keypad);
       findViews();
-      if(Prefs.getHints(getContext())){
+      if(Prefs.getHints(getContext())&& (Test.TEST||((IGame)context).allowTip())){
 	      for (int element : useds) {
 	         if (element != 0)
 	            keys[element - 1].setVisibility(View.INVISIBLE);
 	      }
       }
+      setCancelable(false);
       setListeners();
    }
    // ...
@@ -86,6 +96,9 @@ public class Keypad extends Dialog {
       keys[6] = findViewById(R.id.keypad_7);
       keys[7] = findViewById(R.id.keypad_8);
       keys[8] = findViewById(R.id.keypad_9);
+      clear = findViewById(R.id.keypad_clear);
+      clearAll = findViewById(R.id.keypad_clearall);
+
    }
 
    private void setListeners() {
@@ -96,9 +109,23 @@ public class Keypad extends Dialog {
                returnResult(t);
             }});
       }
-      keypad.setOnClickListener(new View.OnClickListener(){
+//      keypad.setOnClickListener(new View.OnClickListener(){
+//         public void onClick(View v) {
+//            returnResult(0);
+//         }});
+         clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               puzzleView.clearTile();
+               dismiss();
+            }
+         });
+      clearAll.setOnClickListener(new View.OnClickListener() {
+         @Override
          public void onClick(View v) {
-            returnResult(0);
-         }});
+            puzzleView.clearAllTile();
+            dismiss();
+         }
+      });
    }
 }

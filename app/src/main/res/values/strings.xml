@@ -10,8 +10,8 @@
     <string name="sudoku_title">Sudoku</string>
     <string name="sudoku_sub_title">孤独的数字</string>
     <string name="sudoku_continue_game">继续游戏</string>
-    <string name="sudoku_new_game">新游戏</string>
-    <string name="sudoku_stage_mode">闯关模式</string>
+    <string name="sudoku_new_game">单机游戏</string>
+    <string name="sudoku_stage_mode">蓝牙对战</string>
     <string name="sudoku_about">关于数独</string>
     <string name="sudoku_exit">退出游戏</string>
     <string name="sudoku_difficulty_title">难度</string>
@@ -60,4 +60,42 @@
     <string name="Congratulations_one_more_time">再来一局</string>
     <string name="Congratulations_back_to_mainmenu">返回主菜单</string>
     <string name="Congratulations_text">感谢你\n数字们不再孤独了</string>
+    <string name="pk_congratulations_text">恭喜你，挑战胜利</string>
+    <string name="pk_congratulations_finish_text">恭喜你，挑战完成</string>
+    <string name="pk_congratulations_content_text">比赛用时：XXX</string>
+    <string name="pk_end_text">很遗憾，您比赛失败了，对方已经完成了挑战。</string>
+    <string name="pk_end_req_help_text">您是否需要获取对方的帮助</string>
+    <string name="pk_end_help_text">对方需要您的帮助，您是否提供帮助?</string>
+    <string name="title_activity_blue">BlueActivity</string>
+
+
+    <!--by taobao-->
+    <string name="blue_item_connect">连接</string>
+    <string name="blue_item_pd">配对</string>
+    <string name="blue_item_bond_success">配对成功</string>
+    <string name="blue_item_bond_faild">配对失败</string>
+    <string name="blue_connect_finish">蓝牙搜索完成</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="blue_name">玩家名字</string>
+    <string name="blue_address">玩家地址</string>
+    <string name="blue_state">配对情况</string>
+    <string name="request_connect">发起对战</string>
+    <string name="confirm_connect">确认挑战玩家XXX吗？</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="choose_diff">请选择难度：</string>
+    <string name="tip">提示</string>
+    <string name="no_tip">不提示</string>
+    <string name="no_pk">对方拒绝了挑战</string>
+    <string name="start_pk">对方接受了您发起的挑战</string>
+    <string name="pk_type">请选择对战类型：</string>
+    <string name="pk_type_time">计时类型</string>
+    <string name="pk_type_comp">竞赛类型</string>
+    <string name="pk_type_comm">交流类型</string>
+    <string name="pk_stop">正在挑战中，确认要退出吗？</string>
+    <string name="invalid_toast">您输入的数字XXX无效</string>
+    <string name="invalid_has_number_toast">该位置已经有确定数字了</string>
+
+    <string name="clear">清空</string>
+    <string name="clear_all">全部清空</string>
 </resources>

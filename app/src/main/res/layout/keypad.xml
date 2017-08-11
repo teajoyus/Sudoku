@@ -56,4 +56,14 @@
          android:text="9">
       </Button>
    </TableRow>
+   <TableRow >
+      <Button android:id="@+id/keypad_clear"
+         style="@style/CustomButton_for_Keypad"
+         android:text="@string/clear">
+      </Button>
+      <Button android:id="@+id/keypad_clearall"
+         style="@style/CustomButton_for_Keypad"
+         android:text="@string/clear_all">
+      </Button>
+   </TableRow>
 </TableLayout>

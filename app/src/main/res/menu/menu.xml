@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".SudokuMain" >
+    tools:context="com.hat_cloud.sudo.activity.SudokuMain" >
     <item
         android:id="@+id/settings"
         android:title="@string/settings_title"
