@@ -34,11 +34,6 @@
             android:layout_gravity="center"
             android:stretchColumns="*">
 
-            <Button
-                android:id="@+id/button_continue_game"
-                android:layout_width="fill_parent"
-                style="@style/CustomButton_for_MainMenu_land"
-                android:text="@string/sudoku_continue_game"/>
 
             <TableRow>
 
@@ -56,7 +51,7 @@
                 <Button
                     android:id="@+id/button_about"
                     style="@style/CustomButton_for_MainMenu_land"
-                    android:text="@string/sudoku_about"/>
+                    android:text="@string/sudoku_rank"/>
                 <Button
                     android:id="@+id/button_exit"
                     style="@style/CustomButton_for_MainMenu_land"

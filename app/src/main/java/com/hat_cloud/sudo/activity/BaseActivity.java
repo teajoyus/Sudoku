@@ -237,7 +237,7 @@ public class BaseActivity extends Activity {
      * 客户端：服务端确认了挑战
      */
     protected void onClientByServerConfirm() {
-        Toast.makeText(this, getResources().getString(R.string.start_pk), Toast.LENGTH_SHORT).show();
+       showToast(getResources().getString(R.string.start_pk));
 
     }
 
@@ -253,7 +253,7 @@ public class BaseActivity extends Activity {
      * 客户端：服务端拒绝了挑战
      */
     private void onClientByServerCanelConfirm() {
-        Toast.makeText(this, getResources().getString(R.string.no_pk), Toast.LENGTH_SHORT).show();
+       showToast(getResources().getString(R.string.no_pk));
     }
 
     /**
@@ -349,7 +349,12 @@ public class BaseActivity extends Activity {
         return false;
     }
     protected void showToast(String content){
+
         Toast.makeText(BaseActivity.this,content,Toast.LENGTH_SHORT).show();
+    }
+    protected void showToast(int id,String replaceName){
+        String content = getResources().getString(id);
+        Toast.makeText(BaseActivity.this,content.replace("XXX",replaceName),Toast.LENGTH_SHORT).show();
     }
     protected void showToast(int id){
         showToast(getResources().getString(id));

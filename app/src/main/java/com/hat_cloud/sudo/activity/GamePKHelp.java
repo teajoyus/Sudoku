@@ -28,7 +28,7 @@ public class GamePKHelp extends GameCommon {
         ActionBar bar = getActionBar();
         if(bar!=null){
             if(name!=null){
-                bar.setTitle("\t\t\t\t"+getResources().getString(R.string.pk_with_name).replace("XXX",name));
+                bar.setTitle("\t\t\t\t"+getResources().getString(R.string.help_with_name).replace("XXX",name));
             }
         }
     }

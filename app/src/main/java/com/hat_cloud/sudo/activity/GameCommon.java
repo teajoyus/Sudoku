@@ -131,13 +131,11 @@ public class GameCommon extends BaseActivity implements IGame {
      * 点击进入聊天界面
      */
     protected void gotoChatListener(){
-        showToast("222");
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GameCommon.this, ChatActivity.class);
                 startActivity(intent);
-                showToast("222222");
                 unRead.setText("0");
                 unRead.setVisibility(View.INVISIBLE);
             }
@@ -688,6 +686,7 @@ public class GameCommon extends BaseActivity implements IGame {
         helpPuzzle[y * 9 + x] = value;
         puzzleView.invalidate();//刷新页面
     }
+
     protected  void onReceiveChat(BlueMessage msg){
         //将消息添加到列表中
         ChatActivity.addTargetMessage((String) msg.get("chat"));
@@ -723,11 +722,6 @@ public class GameCommon extends BaseActivity implements IGame {
     class unReadAnimatorListener implements Animator.AnimatorListener{
 
         @Override
-        public void onAnimationStart(Animator animation) {
-
-        }
-
-        @Override
         public void onAnimationEnd(Animator animation) {
             if(unRead.getScaleX()-1.0f<0.1f){
                 unRead.animate().scaleX(1.3f).scaleY(1.3f).setDuration(500);
@@ -735,15 +729,33 @@ public class GameCommon extends BaseActivity implements IGame {
                 unRead.animate().scaleX(1.0f).scaleY(1.0f).setDuration(500);
             }
         }
-
         @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-
+        public void onAnimationCancel(Animator animation) {}
         @Override
-        public void onAnimationRepeat(Animator animation) {
+        public void onAnimationRepeat(Animator animation) { }
+        @Override
+        public void onAnimationStart(Animator animation) { }
+    }
 
-        }
+    @Override
+    protected void onPKStop() {
+        super.onPKStop();
+        showToast(R.string.pk_stop_msg);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.pk_stop));
+        builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_STOP);
+                send(msg);
+                GameCommon.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel),null);
+        builder.show();
     }
 }

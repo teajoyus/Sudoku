@@ -33,20 +33,7 @@ public class GamePKTime extends GameCommon {
     private static final String TAG = "GamePKTime";
 
 
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.pk_stop));
-        builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_STOP);
-                send(msg);
-                GamePKTime.super.onBackPressed();
-            }
-        });
-        builder.setNegativeButton(getResources().getString(R.string.cancel),null);
-    }
+
 
 
 }

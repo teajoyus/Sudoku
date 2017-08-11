@@ -55,7 +55,9 @@
             android:name="com.hat_cloud.sudo.task.TaskService"
             android:enabled="true"
             android:exported="true" />
-<activity android:name="com.hat_cloud.sudo.chat.ChatActivity"></activity>
+
+        <activity android:name="com.hat_cloud.sudo.chat.ChatActivity" />
+        <activity android:name="com.hat_cloud.sudo.activity.RankActivity"></activity>
     </application>
 
 </manifest>

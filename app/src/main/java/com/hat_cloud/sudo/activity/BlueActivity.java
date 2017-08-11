@@ -11,6 +11,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -47,7 +50,38 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
         regist();
         mBluetoothAdapter.startDiscovery();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
 
+    /**
+     * 菜单项，可以进入修改用户姓名
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                startActivity(new Intent(this, Prefs.class));
+                return true;
+
+            case android.R.id.home:
+                finish();
+                return true;
+
+        }
+        return false;
+    }
+    private void motifyName(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.blue_motify_name));
+        builder.show();
+    }
     private void openBlueTooch() {
         if (!mBluetoothAdapter.isEnabled()) {
             //弹出对话框提示用户是后打开
@@ -155,6 +189,7 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
         BluetoothDevice device = (BluetoothDevice) view.getTag();
         //如果还没配对就必须先配对
         if(device.getBondState()== BluetoothDevice.BOND_NONE){
+            showToast(R.string.blue_item_pd_try,device.getName());
             //利用反射方法调用BluetoothDevice.createBond(BluetoothDevice remoteDevice);
             Method createBondMethod = null;
             try {
@@ -288,6 +323,7 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 tip = (i==0);
+                showToast(R.string.blue_item_connect_try,mBluetoothAdapter.getName());
                 requestPK(mBluetoothAdapter.getName(),diff,type,tip);//选完后发起挑战
                 dialogInterface.dismiss();
             }

@@ -23,9 +23,6 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
         setContentView(R.layout.activity_sudoku_main);
 
         //---Set listener for all buttons---
-        View continueButton = findViewById(R.id.button_continue_game);
-        continueButton.setOnClickListener(this);
-        continueButton.setVisibility(View.GONE);
         View startNewGameButton = findViewById(R.id.button_new_game);
         startNewGameButton.setOnClickListener(this);
 
@@ -43,9 +40,6 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
     public void onClick(View v){
         switch(v.getId()){
 
-            case R.id.button_continue_game:
-                startGame(Game.DIFFICULTY_CONTINUE);
-                break;
 
             case R.id.button_new_game:
                 openNewGameDialog();

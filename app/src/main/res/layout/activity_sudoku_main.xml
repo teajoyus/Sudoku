@@ -29,10 +29,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"/>
         <Button
-            android:id="@+id/button_continue_game"
-            style="@style/CustomButton_for_MainMenu"
-            android:text="@string/sudoku_continue_game"/>
-        <Button
             android:id="@+id/button_new_game"
             style="@style/CustomButton_for_MainMenu"
             android:text="@string/sudoku_new_game"/>
@@ -43,7 +39,7 @@
         <Button
             android:id="@+id/button_about"
             style="@style/CustomButton_for_MainMenu"
-            android:text="@string/sudoku_about"/>
+            android:text="@string/sudoku_rank"/>
         <Button
             android:id="@+id/button_exit"
             style="@style/CustomButton_for_MainMenu"

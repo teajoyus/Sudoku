@@ -12,7 +12,7 @@
     <string name="sudoku_continue_game">继续游戏</string>
     <string name="sudoku_new_game">单机游戏</string>
     <string name="sudoku_stage_mode">蓝牙对战</string>
-    <string name="sudoku_about">关于数独</string>
+    <string name="sudoku_rank">排行榜</string>
     <string name="sudoku_exit">退出游戏</string>
     <string name="sudoku_difficulty_title">难度</string>
     <string name="sudoku_difficulty_easy_label">容易</string>
@@ -47,6 +47,8 @@
     <string name="prefs_hints_title">提示</string>
     <string name="prefs_hints_summary">在游戏中显示提示</string>
 
+
+
     <!-- Some text in Menu -->
     <string name="settings_title">Sudoku选项</string>
     <string name="settings_label">选项</string>
@@ -60,18 +62,23 @@
     <string name="Congratulations_one_more_time">再来一局</string>
     <string name="Congratulations_back_to_mainmenu">返回主菜单</string>
     <string name="Congratulations_text">感谢你\n数字们不再孤独了</string>
-    <string name="pk_congratulations_text">恭喜你，挑战胜利</string>
-    <string name="pk_congratulations_finish_text">恭喜你，挑战完成</string>
-    <string name="pk_congratulations_content_text">比赛用时：XXX</string>
+
+
+
+
+    <!--by taobao-->
     <string name="pk_end_text">很遗憾，您比赛失败了，对方已经完成了挑战。</string>
     <string name="pk_end_req_help_text">您是否需要获取对方的帮助</string>
     <string name="pk_end_help_text">对方需要您的帮助，您是否提供帮助?</string>
     <string name="title_activity_blue">BlueActivity</string>
-
-
-    <!--by taobao-->
+    <string name="pk_congratulations_text">恭喜你，挑战胜利</string>
+    <string name="pk_congratulations_finish_text">恭喜你，挑战完成</string>
+    <string name="pk_congratulations_content_text">比赛用时：XXX</string>
+    <string name="blue_motify_name">修改您的用户名：</string>
     <string name="blue_item_connect">连接</string>
     <string name="blue_item_pd">配对</string>
+    <string name="blue_item_pd_try">正在尝试与XXX进行配对</string>
+    <string name="blue_item_connect_try">正在尝试与XXX进行连接</string>
     <string name="blue_item_bond_success">配对成功</string>
     <string name="blue_item_bond_faild">配对失败</string>
     <string name="blue_connect_finish">蓝牙搜索完成</string>
@@ -93,7 +100,8 @@
     <string name="pk_type_time">计时类型</string>
     <string name="pk_type_comp">竞赛类型</string>
     <string name="pk_type_comm">交流类型</string>
-    <string name="pk_stop">正在挑战中，确认要退出吗？</string>
+    <string name="pk_stop">正在游戏中，确认要退出吗？</string>
+    <string name="pk_stop_msg">对方已经退出了游戏，您还可以继续挑战</string>
     <string name="invalid_toast">您输入的数字XXX无效</string>
     <string name="invalid_has_number_toast">该位置已经有确定数字了</string>
 
