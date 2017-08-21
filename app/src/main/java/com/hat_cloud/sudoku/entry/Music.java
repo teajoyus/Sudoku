@@ -1,9 +1,9 @@
-package com.hat_cloud.sudo.entry;
+package com.hat_cloud.sudoku.entry;
 
 import android.content.Context;
 import android.media.MediaPlayer;
 
-import com.hat_cloud.sudo.activity.Prefs;
+import com.hat_cloud.sudoku.activity.Prefs;
 
 public class Music {
    private static MediaPlayer mp = null;

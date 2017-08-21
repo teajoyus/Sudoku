@@ -1,33 +1,15 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 
-import android.app.ActionBar;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hat_cloud.sudo.entry.BlueMessage;
-import com.hat_cloud.sudo.entry.Music;
-import com.hat_cloud.sudo.iface.IGame;
-import com.hat_cloud.sudo.view.CalcTimeTextView;
-import com.hat_cloud.sudo.view.Keypad;
-import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.entry.BlueMessage;
 import com.hat_cloud.sudoku.R;
 
-import java.util.ArrayList;
-import java.util.Random;
-
+/**
+ * 交流类型的对战，继承自GameCommon，只要复写GameCommon的一些方法就可以实现自己的游戏规则
+ */
 public class GamePKCompertition extends GameCommon {
     private static final String TAG = "GamePKCompertition";
     public int pk_show[];//显示对方
@@ -61,7 +43,15 @@ public class GamePKCompertition extends GameCommon {
 
     @Override
     public boolean isTrue(int trueType,int x, int y) {
-        return isPKNumber(x,y)&&getTileString(x, y).isEmpty();
+        if(!super.isTrue(trueType,x,y)) {
+            if(trueType==GAME_PK_COMPERTITION) {
+                return isPKNumber(x, y) && getTileString(x, y).isEmpty();
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
     @Override

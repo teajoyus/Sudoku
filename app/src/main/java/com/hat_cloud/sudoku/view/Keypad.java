@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.view;
+package com.hat_cloud.sudoku.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.hat_cloud.sudo.activity.Game;
-import com.hat_cloud.sudo.activity.Prefs;
-import com.hat_cloud.sudo.entry.Test;
-import com.hat_cloud.sudo.iface.IGame;
-import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.activity.Prefs;
+import com.hat_cloud.sudoku.entry.Test;
+import com.hat_cloud.sudoku.iface.IGame;
 import com.hat_cloud.sudoku.R;
 
+/**
+ * 弹出数字键盘的类，提供给用户进行输入
+ */
 public class Keypad extends Dialog {
 
    private final View keys[] = new View[9];
@@ -41,7 +42,7 @@ public class Keypad extends Dialog {
 	            keys[element - 1].setVisibility(View.INVISIBLE);
 	      }
       }
-      setCancelable(false);
+      setCancelable(true);
       setListeners();
    }
    // ...

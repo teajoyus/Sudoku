@@ -49,9 +49,13 @@
 
             <TableRow>
                 <Button
-                    android:id="@+id/button_about"
-                    style="@style/CustomButton_for_MainMenu_land"
+                    android:id="@+id/button_rank"
+                    style="@style/CustomButton_for_MainMenu"
                     android:text="@string/sudoku_rank"/>
+                <Button
+                    android:id="@+id/button_manual"
+                    style="@style/CustomButton_for_MainMenu"
+                    android:text="@string/sudoku_about"/>
                 <Button
                     android:id="@+id/button_exit"
                     style="@style/CustomButton_for_MainMenu_land"

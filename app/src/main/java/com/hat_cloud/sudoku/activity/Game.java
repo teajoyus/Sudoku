@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,6 @@ import java.util.Random;
 
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -20,10 +19,10 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.hat_cloud.sudo.iface.IGame;
-import com.hat_cloud.sudo.view.Keypad;
-import com.hat_cloud.sudo.entry.Music;
-import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.iface.IGame;
+import com.hat_cloud.sudoku.view.Keypad;
+import com.hat_cloud.sudoku.entry.Music;
+import com.hat_cloud.sudoku.view.PuzzleView;
 import com.hat_cloud.sudoku.R;
 
 public class Game extends GameCommon implements IGame{

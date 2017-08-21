@@ -1,16 +1,16 @@
-package com.hat_cloud.sudo.view;
+package com.hat_cloud.sudoku.view;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
- * Created by linmh on 2017/8/9.
+ * 一个计时器，通过自定义view重写TextView来达到自动计时、设置和清除计时的功能
  */
 
-public class CalcTimeTextView extends TextView {
+public class CalcTimeTextView extends AppCompatTextView {
     int hh,mm,ss;
     int time;
     public static final int DELAYED  = 1000;
@@ -43,6 +43,9 @@ public class CalcTimeTextView extends TextView {
         ss = time%60;
         mm = time/60;
         hh = time/3600;
+    }
+    public void stop(){
+        handler.removeMessages(0);
     }
     /**
      * 每秒钟执行一次

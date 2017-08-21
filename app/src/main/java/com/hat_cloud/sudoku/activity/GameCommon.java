@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 import android.animation.Animator;
 import android.app.ActionBar;
@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -16,24 +17,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hat_cloud.sudo.chat.ChatActivity;
-import com.hat_cloud.sudo.entry.BlueMessage;
-import com.hat_cloud.sudo.entry.Music;
-import com.hat_cloud.sudo.iface.IGame;
-import com.hat_cloud.sudo.view.CalcTimeTextView;
-import com.hat_cloud.sudo.view.Keypad;
-import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.entry.BlueMessage;
+import com.hat_cloud.sudoku.entry.Music;
+import com.hat_cloud.sudoku.entry.Rank;
+import com.hat_cloud.sudoku.iface.IGame;
+import com.hat_cloud.sudoku.view.CalcTimeTextView;
+import com.hat_cloud.sudoku.view.Keypad;
+import com.hat_cloud.sudoku.view.PuzzleView;
 import com.hat_cloud.sudoku.R;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Created by linmh on 2017/8/10.
+ * 几个游戏类型的基类。因为几个类型是有很多共同的地方的，所以抽出来形成一个基类
+ * 不同类型的游戏只要继承这个类，就可以实现自己的游戏规则。
+ * 该类已经继承自BaseActivity，所以该类就拥有了蓝牙通信的功能，只需要把接口通信方法与游戏关联起来即可
+ * 该类实现了IGame接口，IGame是数独游戏的相关类，在PuzzleView会持有对IGame的引用，从而根据不同的子类传进去的类型根据多态实现不同的反应
  */
 
 public class GameCommon extends BaseActivity implements IGame {
@@ -73,7 +76,7 @@ public class GameCommon extends BaseActivity implements IGame {
     private void test(){
         BlueMessage blueMessage = new BlueMessage(BlueMessage.HEADER_CHAT_MESSAGE);
         blueMessage.put("chat", SystemClock.uptimeMillis()+"");
-        onReceiveChat(blueMessage);
+       // onReceiveChat(blueMessage);
 
     }
     /**
@@ -86,6 +89,9 @@ public class GameCommon extends BaseActivity implements IGame {
             sendPuzzle();
         }
         calculateUsedTiles();
+        if(getType()!=IGame.GAME_LOCAL) {
+            Prefs.setHints(this, tip);
+        }
     }
     /**
      * 接收参数
@@ -106,12 +112,12 @@ public class GameCommon extends BaseActivity implements IGame {
     protected void initView(){
         TextView type_tv = (TextView) findViewById(R.id.type_tv);
          time_tv = (CalcTimeTextView) findViewById(R.id.time_tv);
+        time_tv.setVisibility(View.VISIBLE);
+        if(type!=-1) {
         String arr[] = new String[]{getResources().getString(R.string.pk_type_time),
                 getResources().getString(R.string.pk_type_comp),getResources().getString(R.string.pk_type_comm)};
         type_tv.setText(arr[type]);
-        if(type!=-1) {
             type_tv.setVisibility(View.VISIBLE);
-            time_tv.setVisibility(View.VISIBLE);
             if(time!=0){
                 time_tv.setTime(time);
             }
@@ -352,6 +358,9 @@ public class GameCommon extends BaseActivity implements IGame {
 
     protected void setTile(int x, int y, int value) {
         puzzle[y * 9 + x] = value;
+        if(helpPuzzle!=null) {
+            helpPuzzle[y * 9 + x] = 0;
+        }
 
     }
 
@@ -366,12 +375,19 @@ public class GameCommon extends BaseActivity implements IGame {
         return used[x][y];
     }
 
+    /**
+     * 清除某个位置的数字
+     * @param x
+     * @param y
+     */
     @Override
     public void clearTile(int x, int y) {
         puzzle[y * 9 + x] = 0;
         puzzleView.invalidate();
     }
-
+    /**
+     * 清除所有输入位置的数字
+     */
     @Override
     public void clearAllTile() {
         for (int i = 0;i<initPuzzle.length;i++){
@@ -387,6 +403,11 @@ public class GameCommon extends BaseActivity implements IGame {
      */
     @Override
     public void showKeypadOrError(int x, int y) {
+        //isWon代表游戏已经结束的了
+        if(isWon()){
+            showToast(R.string.pk_end_tip);
+            return ;
+        }
         int tiles[] = getUsedTiles(x, y);
         if (tiles.length == 9) {
             Toast toast = Toast.makeText(this,
@@ -517,8 +538,19 @@ public class GameCommon extends BaseActivity implements IGame {
         //如果不是自己赢了的话，那么只提示挑战成功
         //要自己赢了的话才会去通知对方
         if(isWon){
-            BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_END);
-            send(msg);
+            time_tv.stop();//停止即时
+            if(type!=IGame.GAME_LOCAL) {
+                BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_END);
+                msg.put("time",time_tv.getText().toString());
+                msg.put("time_num",time_tv.getTime()+"");
+                send(msg);
+            }
+            Rank new_rank = new Rank();
+            new_rank.setName(mBluetoothAdapter==null||mBluetoothAdapter.getName()==null?"emulator":mBluetoothAdapter.getName());
+            new_rank.setTime(time_tv.getText().toString());
+            new_rank.setTime_num(time_tv.getTime());
+            new_rank.setType(getType());
+            update(new_rank);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -537,6 +569,30 @@ public class GameCommon extends BaseActivity implements IGame {
         builder.show();
     }
 
+    /**
+     * 更新排行榜
+     * @param rank
+     */
+    private void update(Rank rank){
+        //如果成绩第一则记录排行
+        SharedPreferences sharedPreferences = getSharedPreferences("rank",MODE_ENABLE_WRITE_AHEAD_LOGGING );
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String s  = sharedPreferences.getString(getType()+"",null);
+        //如果有记录的话，则比较一下比赛的时间
+        Rank old_rank = null;
+        if(s!=null&&Rank.isValid(s)) {
+            old_rank = new Rank(s);
+        }
+        //如果现在挑战的时间比记录里面的短，那么就替换
+        if(old_rank==null||rank.getTime_num()<old_rank.getTime_num()){
+            editor.putString(getType()+"",rank.toString());
+            Log.i(TAG_GameCommon, "Congratulations: "+rank);
+            editor.commit();
+//            SharedPreferences preferences =  getSharedPreferences(IGame.BLUE_NAME,MODE_ENABLE_WRITE_AHEAD_LOGGING );
+//            Map<String ,String> map = (Map<String, String>) preferences.getAll();
+//            Log.i(TAG_GameCommon, "map: "+map);
+        }
+    }
     /**
      * 得到用户输入的puzzle
      * @return
@@ -593,6 +649,7 @@ public class GameCommon extends BaseActivity implements IGame {
      */
     static public int[] fromPuzzleString(String string) {
         int[] puz = new int[string.length()];
+        float l = 0f;
         for (int i = 0; i < puz.length; i++) {
             puz[i] = string.charAt(i) - '0';
         }
@@ -602,7 +659,7 @@ public class GameCommon extends BaseActivity implements IGame {
     @Override
     public Object getData(int type,int x, int y) {
         //如果是帮助的话就返回帮助的参考数字
-        if(type ==IGame.GAME_PK_HELP){
+        if(type ==IGame.GAME_PK_HELP&&helpPuzzle!=null){
             return String.valueOf(helpPuzzle[y*9+x]);
         }
         return null;
@@ -611,9 +668,15 @@ public class GameCommon extends BaseActivity implements IGame {
     /**
      * 收到对方赢了的消息
      */
-    private  void onPKEnd(){
+    private  void onPKEnd(BlueMessage msg){
         //false表示输了
         isWon = false;
+        Rank rank = new Rank();
+        rank.setName(name);
+        rank.setTime_num(Integer.parseInt((String) msg.get("time_num")));
+        rank.setType(getType());
+        rank.setTime((String) msg.get("time"));
+        update(rank);
         //弹出提示框提示对方已经胜利了
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.pk_end_text));
@@ -629,10 +692,12 @@ public class GameCommon extends BaseActivity implements IGame {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_REQ_HELP);
-                        int p[] = new int[]{0,0,5,0,0,8,2,1,0,6,2,0,7,0,0,4,4,0,7,0,9,3,4,5,6,3,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
-                        int init_p[] = new int[]{0,0,5,0,0,8,0,1,0,6,2,0,7,0,0,0,4,0,7,0,9,3,4,5,6,0,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
-                        msg.put(IGame.PREF_PUZZLE,toPuzzleString(p));
-                        msg.put(IGame.PREF_INIT_PUZZLE,toPuzzleString(init_p));
+//                        int p[] = new int[]{0,0,5,0,0,8,2,1,0,6,2,0,7,0,0,4,4,0,7,0,9,3,4,5,6,3,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
+//                        int init_p[] = new int[]{0,0,5,0,0,8,0,1,0,6,2,0,7,0,0,0,4,0,7,0,9,3,4,5,6,0,8,0,5,3,2,0,0,1,0,7,0,8,0,1,0,0,4,5,0,0,0,0,4,5,0,2,0,0,5,0,0,0,0,2,0,0,1,0,6,2,0,0,0,5,3,0,9,7,1,0,0,0,0,0,0};
+//                        msg.put(IGame.PREF_PUZZLE,toPuzzleString(p));
+//                        msg.put(IGame.PREF_INIT_PUZZLE,toPuzzleString(init_p));
+                        msg.put(IGame.PREF_PUZZLE,toPuzzleString(puzzle));
+                        msg.put(IGame.PREF_INIT_PUZZLE,toPuzzleString(initPuzzle));
                         CalcTimeTextView tv = (CalcTimeTextView) findViewById(R.id.time_tv);
                         msg.put(IGame.PREF_TIME,tv.getTime());
                         send(msg);
@@ -673,6 +738,15 @@ public class GameCommon extends BaseActivity implements IGame {
     }
 
     /**
+     * 接收到对方同意帮助的消息
+     */
+    private void onConnectHelp(){
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle(getResources().getString(R.string.pk_end_connect_help_text));
+        builder2.setNegativeButton(getResources().getString(R.string.confirm),null);
+        builder2.show();
+    }
+    /**
      * 收到对方在帮助的时候发过来的参考数字
      * @param msg
      */
@@ -705,7 +779,7 @@ public class GameCommon extends BaseActivity implements IGame {
         switch (msg.getType()){
             //收到比赛结束的通知H
             case BlueMessage.HEADER_PK_END:
-                onPKEnd();
+                onPKEnd(msg);
                 break;
             //收到请求帮助的通知
             case BlueMessage.HEADER_PK_REQ_HELP:
@@ -716,6 +790,11 @@ public class GameCommon extends BaseActivity implements IGame {
                 break;
             case BlueMessage.HEADER_CHAT_MESSAGE:
                 onReceiveChat(msg);
+                break;
+            case BlueMessage.HEADER_PK_HELP:
+                onConnectHelp();
+                break;
+
 
         }
     }
@@ -745,6 +824,10 @@ public class GameCommon extends BaseActivity implements IGame {
 
     @Override
     public void onBackPressed() {
+        if(isWon()){
+            super.onBackPressed();
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.pk_stop));
         builder.setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {

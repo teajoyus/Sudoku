@@ -1,8 +1,10 @@
-package com.hat_cloud.sudo.iface;
+package com.hat_cloud.sudoku.iface;
 
-import com.hat_cloud.sudo.entry.Test;
+import com.hat_cloud.sudoku.entry.Test;
 
 /**
+ * 不同游戏类型的相关公共方法，被提取了出来
+ * 从而实现在PuzzleView里引用IGame对象，根据不同的游戏类型，IGame对象可以做出不同的反应
  */
 
 public interface IGame {
@@ -17,6 +19,7 @@ public interface IGame {
     int DIFFICULTY_HARD = 2;
 
 
+    int GAME_LOCAL = -1;
     int GAME_PK_TIME = 0;
     int GAME_PK_COMPERTITION = 1;
     int GAME_PK_TCOMMUNICATION = 2;

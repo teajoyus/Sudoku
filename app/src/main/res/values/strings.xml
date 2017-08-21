@@ -7,38 +7,23 @@
 
     <!-- Some text in Sudoku Activity -->
     <string name="title_activity_sudoku">Sudoku</string>
+    <!-- 菜单的标题-->
     <string name="sudoku_title">Sudoku</string>
     <string name="sudoku_sub_title">孤独的数字</string>
-    <string name="sudoku_continue_game">继续游戏</string>
+
+    <!-- 菜单-->
     <string name="sudoku_new_game">单机游戏</string>
     <string name="sudoku_stage_mode">蓝牙对战</string>
     <string name="sudoku_rank">排行榜</string>
+    <string name="sudoku_about">操作手册</string>
     <string name="sudoku_exit">退出游戏</string>
+
+
     <string name="sudoku_difficulty_title">难度</string>
     <string name="sudoku_difficulty_easy_label">容易</string>
     <string name="sudoku_difficulty_medium_label">普通</string>
     <string name="sudoku_difficulty_hard_label">困难</string>
 
-    <!-- Some text in About Activity -->
-    <string name="title_activity_about">关于</string>
-    <string name="about_text">在Sudoku王国里，所有的数字臣民都很矛盾：
-        他们不喜欢和自己极为相似的人呆在一起，而同时又无比希望自己的身边住满伙伴，
-        因为他们讨厌自己一个人孤独的生活。为了让所有臣民都能摆脱孤独，Sudoku国王伤透了脑筋。
-        \n\n规则：Sudoku王国是个九宫，每一宫又分为九个小格。在这八十一格中给出一定的已知数字和解题条件
-        ，利用逻辑和推理，在其他的空格上填入1-9的数字。使1-9每个数字在每一行、每一列和每一
-        宫中都只出现一次。
-        \n\n提示信息
-        \n黄色：该格子只剩2种可能的数字
-        \n橙色：该格子只剩1种可能的数字
-        \n红色：该格子不能继续往里填数字了
-        \n\n假如你卡住了，不妨试试开启设置里的”提示“功能吧
-        </string>
-    <!-- <string name="about_text">数独（すうどく，Sūdoku）是一种运用纸、笔进行演算的逻辑游戏。
-        玩家需要根据9×9盘面上的已知数字，推理出所有剩余空格的数字，并满足每一行、每一列、
-        每一个粗线宫内的数字均含1-9，不重复。
-        /n独盘面是个九宫，每一宫又分为九个小格。在这八十一格中给出一定的已知数字和解题条件
-        ，利用逻辑和推理，在其他的空格上填入1-9的数字。使1-9每个数字在每一行、每一列和每一
-        宫中都只出现一次。</string> -->
 
     <!-- Some text in Prefs Activity -->
     <string name="prefs_title">设置</string>
@@ -46,7 +31,6 @@
     <string name="prefs_music_summary">播放背景音乐</string>
     <string name="prefs_hints_title">提示</string>
     <string name="prefs_hints_summary">在游戏中显示提示</string>
-
 
 
     <!-- Some text in Menu -->
@@ -64,12 +48,11 @@
     <string name="Congratulations_text">感谢你\n数字们不再孤独了</string>
 
 
-
-
-    <!--by taobao-->
+    <!--对战的提示语-->
     <string name="pk_end_text">很遗憾，您比赛失败了，对方已经完成了挑战。</string>
     <string name="pk_end_req_help_text">您是否需要获取对方的帮助</string>
     <string name="pk_end_help_text">对方需要您的帮助，您是否提供帮助?</string>
+    <string name="pk_end_connect_help_text">对方同意帮助您，格子显示红色即为对方为您输入的数字</string>
     <string name="title_activity_blue">BlueActivity</string>
     <string name="pk_congratulations_text">恭喜你，挑战胜利</string>
     <string name="pk_congratulations_finish_text">恭喜你，挑战完成</string>
@@ -84,6 +67,8 @@
     <string name="blue_connect_finish">蓝牙搜索完成</string>
     <string name="blue_name">玩家名字</string>
     <string name="blue_address">玩家地址</string>
+    <string name="blue_time">完成时间</string>
+    <string name="blue_type">挑战类型</string>
     <string name="blue_state">配对情况</string>
     <string name="request_connect">发起对战</string>
     <string name="confirm_connect">确认挑战玩家XXX吗？</string>
@@ -108,7 +93,13 @@
     <string name="clear">清空</string>
     <string name="clear_all">全部清空</string>
 
+
     <string name="chat_empty">聊天内容为空，您还没有写内容</string>
 
+    <string name="no_rank">目前还没有排名数据</string>
+
+    <string name="pk_end_tip">游戏已经结束，请退出</string>
+
+    <string name="game_manual">游戏说明手册</string>
 
 </resources>

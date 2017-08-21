@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -18,12 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hat_cloud.sudo.entry.BlueMessage;
-import com.hat_cloud.sudo.iface.IGame;
+import com.hat_cloud.sudoku.iface.IGame;
 import com.hat_cloud.sudoku.R;
 
 import java.lang.reflect.Method;
@@ -31,6 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 蓝牙搜素、配对、发起对战的类
+ * 继承了BaseActivity所以也就有了蓝牙通信功能，可以直接调用父类的方法来完成蓝牙通信
+ */
 public class BlueActivity extends BaseActivity implements View.OnClickListener{
     private static final int REQUEST_ENABLE = 100;
     private static final String TAG = "BlueActivity";
@@ -45,10 +48,11 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
         setContentView(R.layout.activity_blue);
         lv = (ListView) findViewById(R.id.lv);
         openBlueTooch();
-        showToast("s");
         show();
         regist();
-        mBluetoothAdapter.startDiscovery();
+        if(mBluetoothAdapter!=null){
+            mBluetoothAdapter.startDiscovery();
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,25 +69,29 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                startActivity(new Intent(this, Prefs.class));
-                return true;
-
-            case android.R.id.home:
-                finish();
-                return true;
-
-        }
-        return false;
+        motifyName();
+        return true;
     }
     private void motifyName(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText et = new EditText(this);
+        et.setPadding(15,0,15,0);
+        et.setText(mBluetoothAdapter.getName());
         builder.setTitle(getResources().getString(R.string.blue_motify_name));
+        builder.setView(et);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = et.getText().toString();
+                if(!name.isEmpty()){
+                    mBluetoothAdapter.setName(name);
+                }
+            }
+        });
         builder.show();
     }
     private void openBlueTooch() {
-        if (!mBluetoothAdapter.isEnabled()) {
+        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
             //弹出对话框提示用户是后打开
             Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enabler, REQUEST_ENABLE);
@@ -91,6 +99,7 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void show() {
+        if(mBluetoothAdapter==null)return;;
         //获取本机蓝牙名称
         String name = mBluetoothAdapter.getName();
         //获取本机蓝牙地址

@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.hat_cloud.sudo.activity.SudokuMain"
+            android:name=".activity.SudokuMain"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,42 +22,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.hat_cloud.sudo.activity.About"
-            android:label="@string/title_activity_about"
-            android:theme="@android:style/Theme.Dialog" />
-        <activity
-            android:name="com.hat_cloud.sudo.activity.Prefs"
+            android:name=".activity.Prefs"
             android:label="@string/settings_label" />
         "
         <activity
-            android:name="com.hat_cloud.sudo.activity.Game"
+            android:name=".activity.Game"
             android:label="@string/title_activity_game" />
         <activity
-            android:name="com.hat_cloud.sudo.activity.GamePKTime"
+            android:name=".activity.GamePKTime"
             android:label="@string/title_activity_game" />
         <activity
-            android:name="com.hat_cloud.sudo.activity.GameCommon"
+            android:name=".activity.GameCommon"
             android:label="@string/title_activity_game" />
         <activity
-            android:name="com.hat_cloud.sudo.activity.GamePKCompertition"
+            android:name=".activity.GamePKCompertition"
             android:label="@string/title_activity_game" />
         <activity
-            android:name="com.hat_cloud.sudo.activity.GamePKCommunication"
+            android:name=".activity.GamePKCommunication"
             android:label="@string/title_activity_game" />
         <activity
-            android:name="com.hat_cloud.sudo.activity.GamePKHelp"
+            android:name=".activity.GamePKHelp"
             android:label="@string/title_activity_game" />
         <activity
-            android:name="com.hat_cloud.sudo.activity.BlueActivity"
+            android:name=".activity.BlueActivity"
             android:label="@string/title_activity_blue" />
 
         <service
-            android:name="com.hat_cloud.sudo.task.TaskService"
+            android:name=".task.TaskService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name="com.hat_cloud.sudo.chat.ChatActivity" />
-        <activity android:name="com.hat_cloud.sudo.activity.RankActivity"></activity>
+        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.RankActivity" />
+        <activity android:name=".activity.ManualActivity"></activity>
     </application>
 
 </manifest>

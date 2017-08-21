@@ -1,16 +1,14 @@
-package com.hat_cloud.sudo.chat;
+package com.hat_cloud.sudoku.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.hat_cloud.sudo.activity.BaseActivity;
-import com.hat_cloud.sudo.entry.BlueMessage;
+import com.hat_cloud.sudoku.chat.ChatListViewAdapter;
+import com.hat_cloud.sudoku.entry.BlueMessage;
 import com.hat_cloud.sudoku.R;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 聊天界面，继承了BaseActivity，所以只需要调用父类的方法就可以完成消息的发送和接收
+ */
 public class ChatActivity extends BaseActivity implements View.OnClickListener{
     private ListView mList;
     private EditText inputEdit;
@@ -49,7 +50,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener{
     }
 
     /**
-     * 添加对方的消息到数据列表中
+     * 添加对方的消息到数据列表中,静态方法，提供给游戏界面调用
      * @param msg
      */
     public static void addTargetMessage(String msg){

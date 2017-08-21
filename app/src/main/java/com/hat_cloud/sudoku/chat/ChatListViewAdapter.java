@@ -1,6 +1,5 @@
-package com.hat_cloud.sudo.chat;
+package com.hat_cloud.sudoku.chat;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +26,9 @@ import android.widget.TextView;
 
 import com.hat_cloud.sudoku.R;
 
+/**
+ * 聊天适配器
+ */
 public class ChatListViewAdapter extends BaseAdapter {
 	public static final int ROLE_OWN = 0;
 	public static final int ROLE_TARGET = 1;

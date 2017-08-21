@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.task;
+package com.hat_cloud.sudoku.task;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,20 +12,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by ranjiaqing on 17/7/19.
+ * Service组件，一个后台的蓝牙服务，也正是因为这个服务
+ * 才建立起了与对方手机的连接，发送数据给对方，还有循环监听对方是否发来消息
  */
 
 public class TaskService extends Service{

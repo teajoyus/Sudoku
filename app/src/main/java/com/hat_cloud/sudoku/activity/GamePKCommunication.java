@@ -1,32 +1,20 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 
-import android.app.ActionBar;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hat_cloud.sudo.entry.BlueMessage;
-import com.hat_cloud.sudo.entry.Music;
-import com.hat_cloud.sudo.iface.IGame;
-import com.hat_cloud.sudo.view.Keypad;
-import com.hat_cloud.sudo.view.PuzzleView;
+import com.hat_cloud.sudoku.entry.BlueMessage;
+import com.hat_cloud.sudoku.view.Keypad;
 import com.hat_cloud.sudoku.R;
 
-import java.util.ArrayList;
-import java.util.Random;
 
+/**
+ * 交流类型的对战，继承自GameCommon，只要复写GameCommon的一些方法就可以实现自己的游戏规则
+ */
 public class GamePKCommunication extends GameCommon {
     private static final String TAG = "GamePKCommunication";
     //用于代表每个格子里面的参考数字
@@ -61,17 +49,29 @@ public class GamePKCommunication extends GameCommon {
      */
     @Override
     public boolean isTrue(int trueType, int x, int y) {
-         if(!getTileString(x,y).isEmpty()){
-             return false;
-         }
-         for (int i = 0;i<9;i++){
-             //!=0代表有参考数字
-             if(referPuzzle[y][x][i]!=0){
-                 return true;
-             }
-         }
+        if(super.isTrue(trueType,x,y)){
+            return true;
+        }
+        if(trueType==GAME_PK_TCOMMUNICATION) {
+            if (!getTileString(x, y).isEmpty()) {
+                return false;
+            }
+            for (int i = 0; i < 9; i++) {
+                //!=0代表有参考数字
+                if (referPuzzle[y][x][i] != 0) {
+                    return true;
+                }
+            }
+        }
          return false;
     }
+
+    /**
+     * 得到某个位置上的参考数字
+     * @param x
+     * @param y
+     * @return
+     */
     public int[][] getReferPuzzle(int x, int y){
         int t[][] = new int[3][3];
         for (int i = 0,j=-1;i<9;i++){
@@ -104,6 +104,11 @@ public class GamePKCommunication extends GameCommon {
         return super.hasNumber(x, y);
     }
 
+    /**
+     * 基类在清除数据时，这个位置的参考数字也要清除掉
+     * @param x
+     * @param y
+     */
     @Override
     public void clearTile(int x, int y) {
         //清空该格子的参考数字
@@ -112,7 +117,9 @@ public class GamePKCommunication extends GameCommon {
         }
         super.clearTile(x, y);
     }
-
+    /**
+     * 基类在清除数据时，参考数字也要清除掉
+     */
     @Override
     public void clearAllTile() {
         //清空全部的参考数字
@@ -126,9 +133,17 @@ public class GamePKCommunication extends GameCommon {
         super.clearAllTile();
     }
 
+    /**
+     * 复写自己对于检验输入数字是否有效的规则
+     * @param x
+     * @param y
+     * @param value
+     * @return
+     */
     @Override
     public boolean setTileIfValid(int x, int y, int value) {
         int tiles[] = getUsedTiles(x, y);
+        //如果数字是无效的就直接返回了
         if (value != 0) {
             for (int tile : tiles) {
                 if (tile == value){
@@ -137,6 +152,7 @@ public class GamePKCommunication extends GameCommon {
                 }
             }
         }
+        //如果是长按的话那么就直接设置数字
         if(longClick){
             setTile(x,y,value);
             longClick = false;

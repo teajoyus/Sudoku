@@ -1,7 +1,6 @@
-package com.hat_cloud.sudo.entry;
+package com.hat_cloud.sudoku.entry;
 
 import java.io.Serializable;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +9,9 @@ import java.util.Map;
 /**
  *
  * 消息发送接收之间的一个消息类型，用一个消息头来代表
- * 有什么字段直接调用add方法添加进去，然后再一个个拿出来，有点像是队列
- * 或者是通过MAP映射键值的关系
+ * 只有一个一参构造方法，规定了创建对象的时候必须指定类型。
+ * 有什么字段直接调用add方法添加进去，然后再一个个拿出来，有点像是队列（事实上在本项目里面暂未使用到）
+ * 或者是通过map映射键值的关系,通过调用put方法来存入数据，通过get方法来通过某个key获取到value
  **/
 
 public class BlueMessage implements Serializable{
@@ -25,7 +25,7 @@ public class BlueMessage implements Serializable{
 
     public static final int HEADER_PK_END= 0x10002;//游戏结束
     public static final int HEADER_PK_REQ_HELP= 0x10003;//游戏结束后请求帮助
-    public static final int HEADER_PK_HELP= 0x10003;//游戏结束后帮助对方
+    public static final int HEADER_PK_HELP= 0x10004;//游戏结束后帮助对方
 
     public static final int HEADER_COMPERTITION_NUMBER= 0x1001;//竞赛过程中 对方输入的数字的消息
 
@@ -41,6 +41,11 @@ public class BlueMessage implements Serializable{
     private List<String> list;
     private Map<String, Object> map;
     private static BlueMessage msg;
+
+    /**
+     * 只有一个一参构造方法，规定了创建对象的时候必须指定类型。
+     * @param type
+     */
     public BlueMessage(int type){
         this.type = type;
     }
@@ -70,7 +75,7 @@ public class BlueMessage implements Serializable{
      */
     public BlueMessage enQueue(String s) {
         if (list == null) list = new ArrayList<>();
-        list.add(s);
+        list.add(0,s);
         return this;
     }
     /**
@@ -84,7 +89,7 @@ public class BlueMessage implements Serializable{
         }else{
             list.clear();
         }
-        list.add(s);
+        list.add(0,s);
         return this;
     }
 

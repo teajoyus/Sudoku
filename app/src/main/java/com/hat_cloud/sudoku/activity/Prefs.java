@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.view.MenuItem;
 
 import com.hat_cloud.sudoku.R;
 
+/**
+ * 设置页面
+ */
 public class Prefs extends PreferenceActivity {
 
 	//Option names and default values

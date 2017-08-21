@@ -1,4 +1,4 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,11 +10,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
-import com.hat_cloud.sudo.entry.Music;
-import com.hat_cloud.sudo.iface.IGame;
+import com.hat_cloud.sudoku.entry.Music;
+import com.hat_cloud.sudoku.iface.IGame;
 import com.hat_cloud.sudoku.R;
 
-
+/**
+ * 菜单页面，程序的入口
+ */
 public class SudokuMain extends BaseActivity implements OnClickListener{
 
     @Override
@@ -29,7 +31,9 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
         View rankListButton = findViewById(R.id.button_stage_mode);
         rankListButton.setOnClickListener(this);
 
-        View aboutButton = findViewById(R.id.button_about);
+        View rankButton = findViewById(R.id.button_rank);
+        rankButton.setOnClickListener(this);
+        View aboutButton = findViewById(R.id.button_manual);
         aboutButton.setOnClickListener(this);
 
         View exitButton = findViewById(R.id.button_exit);
@@ -49,9 +53,13 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
                 startActivity(intent);
                 break;
 
-            case R.id.button_about:
-                Intent i = new Intent(this,About.class);
+            case R.id.button_rank:
+                Intent i = new Intent(this,RankActivity.class);
                 startActivity(i);
+                break;
+            case R.id.button_manual:
+                Intent i2 = new Intent(this,ManualActivity.class);
+                startActivity(i2);
                 break;
 
             case R.id.button_exit:
@@ -109,10 +117,10 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
     }
     private void startGame(int i) {
         Log.d(TAG, "clicked on " + i);
-        Intent intent = new Intent(this, GamePKCommunication.class);
+        Intent intent = new Intent(this, GameCommon.class);
         intent.putExtra(IGame.KEY_DIFFICULTY, i);
-        intent.putExtra(IGame.BLUE_NAME, "iphone 7");
-        intent.putExtra(IGame.BLUE_TYPE_PK, 2);
+//        intent.putExtra(IGame.BLUE_NAME, "iphone 7");
+        intent.putExtra(IGame.BLUE_TYPE_PK, IGame.GAME_LOCAL);
         intent.putExtra(IGame.BLUE_TIP_PK, true);
         startActivity(intent);
     }

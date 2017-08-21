@@ -1,8 +1,10 @@
-package com.hat_cloud.sudo.task;
+package com.hat_cloud.sudoku.task;
 import android.os.Handler;
 
 /**
- * Created by ranjiaqing on 17/7/19.
+ * 定义一个消息任务
+ * 与BlueMessage类区别在于BlueMessage是存放数据的，而Task类是一个消息任务，用来封装蓝牙任务给Service去处理
+ * BlueMessage类与Task类不存在关联关系
  */
 
 public class Task {

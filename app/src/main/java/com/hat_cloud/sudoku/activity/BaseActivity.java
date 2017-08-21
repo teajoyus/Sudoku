@@ -1,33 +1,47 @@
-package com.hat_cloud.sudo.activity;
+package com.hat_cloud.sudoku.activity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hat_cloud.sudo.entry.BlueMessage;
-import com.hat_cloud.sudo.iface.IGame;
-import com.hat_cloud.sudo.task.Task;
-import com.hat_cloud.sudo.task.TaskService;
+import com.hat_cloud.sudoku.entry.BlueMessage;
+import com.hat_cloud.sudoku.iface.IGame;
+import com.hat_cloud.sudoku.task.Task;
+import com.hat_cloud.sudoku.task.TaskService;
 import com.hat_cloud.sudoku.R;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * 所有界面的基类，这个积累提供了蓝牙的接口方法、和通信中的各类接口调用。
+ * 只要继承这个类，界面就可以进行蓝牙通信
+ * 子类只要复写其中的一些关于蓝牙消息方面的方法，就可以实现自己的操作
+ */
 public class BaseActivity extends Activity {
-    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    protected BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private static final String TAg = "BaseActivity";
     public Handler serverHandler =new MyHandler(this);
+
+    /**
+     * 这个内部类很重要，蓝牙的全部消息都是在service收到消息后通过这个Handler把消息传送过来
+     * 然后再进行消息的类型分发出去
+     * 里面最重要的是这部分：
+     *   case Task.TASK_RECV_MSG:
+     *   mActivity.get().receive((BlueMessage) msg.obj);
+     *   break;
+     *
+     *   receive（）方法
+     *
+     */
     static class MyHandler extends Handler{
         private final WeakReference<BaseActivity> mActivity;
 
@@ -40,6 +54,7 @@ public class BaseActivity extends Activity {
             super.handleMessage(msg);
             if(mActivity.get()==null)return;
             switch (msg.what) {
+                //这个最重要，在连接完成之后每次收到消息都是由这个receive方法来调用
                 case Task.TASK_RECV_MSG:
                     mActivity.get().receive((BlueMessage) msg.obj);
                     break;
@@ -78,6 +93,7 @@ public class BaseActivity extends Activity {
      * 打开蓝牙
      */
     private void openBlueTooch() {
+        //如果页面有传来no的话就表示不打开，这个是子类发过来的
         if (getIntent().getStringExtra("no") != null) {
             return;
         }
@@ -168,7 +184,8 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * 接收消息的回调
+     * 比较重要，接收消息的回调、根据BlueMessage类里面指定的type，也就是消息的类型来做消息分发
+     * 比如BlueMessage类里面指定的type是对方请求作战的，那么就会调用onRequestConnect(msg);
      *
      * @param msg
      */
@@ -268,7 +285,6 @@ public class BaseActivity extends Activity {
         }else{
             intent =new Intent(this, GamePKCommunication.class);
         }
-        Prefs.setHints(this,tip);
         intent.putExtra(IGame.KEY_DIFFICULTY, IGame.DIFFICULTY_BY_BLUE);
         intent.putExtra(IGame.BLUE_NAME, name);
         intent.putExtra(IGame.BLUE_TYPE_PK, type);
