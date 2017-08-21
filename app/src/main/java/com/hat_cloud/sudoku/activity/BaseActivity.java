@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import java.lang.ref.WeakReference;
  * 只要继承这个类，界面就可以进行蓝牙通信
  * 子类只要复写其中的一些关于蓝牙消息方面的方法，就可以实现自己的操作
  */
-public class BaseActivity extends Activity {
+public class BaseActivity extends AppCompatActivity {
     protected BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private static final String TAg = "BaseActivity";
     public Handler serverHandler =new MyHandler(this);
