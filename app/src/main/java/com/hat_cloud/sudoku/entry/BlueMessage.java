@@ -35,6 +35,8 @@ public class BlueMessage implements Serializable{
 
     public static final int HEADER_CHAT_MESSAGE= 0x5001;//聊天消息
 
+    public static final int HEADER_NEXT_GAME_MESSAGE= 0x6001;//请求下一局游戏
+
 
 
     private int type;//消息类型

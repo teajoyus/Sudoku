@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -24,6 +23,7 @@ import com.hat_cloud.sudoku.entry.BlueMessage;
 import com.hat_cloud.sudoku.entry.Music;
 import com.hat_cloud.sudoku.entry.Rank;
 import com.hat_cloud.sudoku.iface.IGame;
+import com.hat_cloud.sudoku.task.Task;
 import com.hat_cloud.sudoku.view.CalcTimeTextView;
 import com.hat_cloud.sudoku.view.Keypad;
 import com.hat_cloud.sudoku.view.PuzzleView;
@@ -71,11 +71,40 @@ public class GameCommon extends BaseActivity implements IGame {
             System.out.print(initPuzzle[i]+",");
         }
         System.out.println("");
-        test();
+//        test();
     }
-    private void test(){
-        BlueMessage blueMessage = new BlueMessage(BlueMessage.HEADER_CHAT_MESSAGE);
-        blueMessage.put("chat", SystemClock.uptimeMillis()+"");
+
+    /**
+     * 用来模拟收到帮助参考数字
+     */
+    private void testReferHelp(){
+//        BlueMessage blueMessage = new BlueMessage(BlueMessage.HEADER_CHAT_MESSAGE);
+//        blueMessage.put("chat", SystemClock.uptimeMillis()+"");
+        new Thread(){
+            @Override
+            public void run() {
+                for(int i = 0;i<9;i++){
+                    for(int j = 0;j<9;j++){
+                        if(puzzle[i*9+j]==0){
+                            // helpPuzzle[i*9+j] = j;
+                            BlueMessage blueMessage = new BlueMessage(BlueMessage.HEADER_HELP_REFER);
+                            blueMessage.put("value", j);
+                            blueMessage.put("x", j);
+                            blueMessage.put("y", i);
+                            serverHandler.obtainMessage(Task.TASK_RECV_MSG,blueMessage).sendToTarget();
+                            try {
+                                sleep(5000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }.start();
+
+
+
        // onReceiveChat(blueMessage);
 
     }
@@ -535,22 +564,41 @@ public class GameCommon extends BaseActivity implements IGame {
      */
     @Override
     public void Congratulations() {
+        time_tv.stop();//停止计时
         //如果不是自己赢了的话，那么只提示挑战成功
         //要自己赢了的话才会去通知对方
         if(isWon){
-            time_tv.stop();//停止即时
+            //如果不是单机游戏则要通知对方
             if(type!=IGame.GAME_LOCAL) {
                 BlueMessage msg = new BlueMessage(BlueMessage.HEADER_PK_END);
                 msg.put("time",time_tv.getText().toString());
                 msg.put("time_num",time_tv.getTime()+"");
                 send(msg);
             }
+            //加入排行榜
             Rank new_rank = new Rank();
             new_rank.setName(mBluetoothAdapter==null||mBluetoothAdapter.getName()==null?"emulator":mBluetoothAdapter.getName());
             new_rank.setTime(time_tv.getText().toString());
             new_rank.setTime_num(time_tv.getTime());
             new_rank.setType(getType());
             update(new_rank);
+        }else{
+            //如果是失败完成的话则提示是否再来一局
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setIcon(R.drawable.prize);
+                builder.setTitle(getResources().getString(R.string.game_title));
+            String content = getResources().getString(R.string.Congratulations_one_more_time).replace("XXX",name);
+            builder.setMessage(content);
+            builder.setCancelable(false);
+            builder.setNegativeButton(getResources().getString(R.string.cancel),null);
+            builder.setPositiveButton(getResources().getString(R.string.confirm),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showDifficultyAdilog();//发起挑战
+                        }
+                    });
+            builder.show();
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -593,6 +641,18 @@ public class GameCommon extends BaseActivity implements IGame {
 //            Log.i(TAG_GameCommon, "map: "+map);
         }
     }
+
+    /**
+     * 收到挑战的棋局，这里是因为下一局游戏，所以先把当前的界面销毁掉进入下一个界面
+     * @param msg
+     */
+    @Override
+    protected void onServerReceivePuzzle(BlueMessage msg) {
+        this.finish();
+        super.onServerReceivePuzzle(msg);
+
+    }
+
     /**
      * 得到用户输入的puzzle
      * @return
@@ -761,6 +821,10 @@ public class GameCommon extends BaseActivity implements IGame {
         puzzleView.invalidate();//刷新页面
     }
 
+    /**
+     * 接收到聊天信息
+     * @param msg
+     */
     protected  void onReceiveChat(BlueMessage msg){
         //将消息添加到列表中
         ChatActivity.addTargetMessage((String) msg.get("chat"));
@@ -771,6 +835,13 @@ public class GameCommon extends BaseActivity implements IGame {
         unRead.setScaleY(1.3f);
         //未读消息的动画
         unRead.animate().scaleX(1.0f).scaleY(1.0f).setDuration(500).setListener(new unReadAnimatorListener());
+
+    }
+
+    /**
+     * 收到对方请求下一局游戏
+     */
+    protected void onReceiveNextGame(){
 
     }
     @Override
@@ -793,6 +864,9 @@ public class GameCommon extends BaseActivity implements IGame {
                 break;
             case BlueMessage.HEADER_PK_HELP:
                 onConnectHelp();
+                break;
+            case BlueMessage.HEADER_NEXT_GAME_MESSAGE:
+                onReceiveNextGame();
                 break;
 
 

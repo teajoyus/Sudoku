@@ -3,6 +3,7 @@ package com.hat_cloud.sudoku.activity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.hat_cloud.sudoku.entry.BlueMessage;
 import com.hat_cloud.sudoku.R;
@@ -34,6 +35,9 @@ public class GamePKHelp extends GameCommon {
         }
     }
 
+    /**
+     * 帮助的界面不会有胜利
+     */
     @Override
     public void Congratulations() {
 //        super.Congratulations();
@@ -41,14 +45,16 @@ public class GamePKHelp extends GameCommon {
 
     @Override
     public boolean setTileIfValid(int x, int y, int value) {
-//        boolean b  = super.setTileIfValid(x, y, value);
-             //发送输入数字的消息给对方
-             BlueMessage msg = new BlueMessage(BlueMessage.HEADER_HELP_REFER);
-             msg.put("value",value);
-             msg.put("x",x);
-             msg.put("y",y);
-             send(msg);
-         return true;
+          boolean b  = super.setTileIfValid(x, y, value);
+        if(b) {
+            //发送输入数字的消息给对方
+            BlueMessage msg = new BlueMessage(BlueMessage.HEADER_HELP_REFER);
+            msg.put("value", value);
+            msg.put("x", x);
+            msg.put("y", y);
+            send(msg);
+        }
+         return b;
     }
 
 

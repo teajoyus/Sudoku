@@ -43,7 +43,7 @@
     <string name="game_title">Sudoku</string>
     <string name="no_moves_label">没有可选择数字</string>
     <string name="keypad_title">请选择数字</string>
-    <string name="Congratulations_one_more_time">再来一局</string>
+    <string name="Congratulations_one_more_time">再与XXX挑战一局？</string>
     <string name="Congratulations_back_to_mainmenu">返回主菜单</string>
     <string name="Congratulations_text">感谢你\n数字们不再孤独了</string>
 

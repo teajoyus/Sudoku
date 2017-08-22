@@ -279,67 +279,6 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
         this.device = device;
         startConnetAsClient(device);
     }
-
-    /**
-     * 显示难度选择的提示框
-     */
-    private void showDifficultyAdilog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.choose_diff));
-        String arr[] = new String[]{getResources().getString(R.string.sudoku_difficulty_easy_label),
-                getResources().getString(R.string.sudoku_difficulty_medium_label),
-                getResources().getString(R.string.sudoku_difficulty_hard_label)};
-        builder.setSingleChoiceItems(arr, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                diff = i;
-                dialogInterface.dismiss();
-                showTypeDialog();//接着选择是否提示
-            }
-        });
-        builder.show();
-    }
-
-    /**
-     * 显示类型选择的提示框
-     */
-    private void showTypeDialog(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.pk_type));
-        String arr[] = new String[]{getResources().getString(R.string.pk_type_time),
-                getResources().getString(R.string.pk_type_comp),getResources().getString(R.string.pk_type_comm)};
-        builder.setSingleChoiceItems(arr, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                type = i;
-                showTipDialog();
-                dialogInterface.dismiss();
-
-            }
-        });
-        builder.show();
-    }
-
-    /**
-     * 显示是否提示的提示框
-     */
-    private void showTipDialog(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.pk_type));
-        String arr[] = new String[]{getResources().getString(R.string.tip),
-                getResources().getString(R.string.no_tip)};
-        builder.setSingleChoiceItems(arr, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                tip = (i==0);
-                showToast(R.string.blue_item_connect_try,mBluetoothAdapter.getName());
-                requestPK(mBluetoothAdapter.getName(),diff,type,tip);//选完后发起挑战
-                dialogInterface.dismiss();
-            }
-        });
-        builder.show();
-    }
-
     /**
      * 销毁时要注销掉广播
      */
