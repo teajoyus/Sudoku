@@ -7,22 +7,23 @@
     </array>
 
     <string-array name="manual_title">
+
+        <item>Timing Mode</item>
         <item>Select</item>
-        <item>Note</item>
-        <item>Solve</item>
-        <item>Note²</item>
-        <item>Invert</item>
-        <item>Clear</item>
-        <item>Zoom</item>
+        <item>Competition Mode²</item>
+        <item>Communication Mode</item>
+        <item>Communication Mode 2</item>
+        <item>Helping method</item>
+        <item>Chat function</item>
     </string-array>
 
     <string-array name="manual_body">
+        <item>Timing mode compare with the time.</item>
         <item>Touch a cell to modify its content.</item>
-        <item>Simply touch a number to add/remove the particular value as candidate.</item>
+        <item>When opponent enter a number, different background will show in a cell</item>
+        <item>Simply touch a number to add the particular value as candidate.</item>
         <item>Touch and hold a number to set your solution.</item>
-        <item>Touch a number twice to change candidates in multiple cells.</item>
-        <item>The marked button removes all present candidates and adds the missing ones.</item>
-        <item>The marked button removes all candidates.</item>
-        <item>Use the zoom gesture to enlarge or shrink the sudoku.</item>
+        <item>The number in a cell by the winner entered will show in red background.</item>
+        <item>chat.</item>
     </string-array>
 </resources>

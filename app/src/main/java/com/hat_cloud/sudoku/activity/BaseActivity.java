@@ -316,6 +316,20 @@ public class BaseActivity extends AppCompatActivity {
     protected void onClientByServerConfirm() {
        showToast(getResources().getString(R.string.start_pk));
 
+        Intent intent =null;
+        if(type==0){
+            intent =new Intent(this, GamePKTime.class);
+        }else if(type==1){
+            intent =new Intent(this, GamePKCompertition.class);
+        }else{
+            intent =new Intent(this, GamePKCommunication.class);
+        }
+        intent.putExtra(IGame.KEY_DIFFICULTY, diff);
+        intent.putExtra(IGame.BLUE_NAME, name);
+        intent.putExtra(IGame.BLUE_TYPE_PK, type);
+        intent.putExtra(IGame.BLUE_TIP_PK, tip);
+        Prefs.setHints(this,tip);
+        startActivity(intent);
     }
 
     /**
@@ -349,6 +363,7 @@ public class BaseActivity extends AppCompatActivity {
         intent.putExtra(IGame.BLUE_NAME, name);
         intent.putExtra(IGame.BLUE_TYPE_PK, type);
         intent.putExtra(IGame.BLUE_TIP_PK, tip);
+        Prefs.setHints(this,tip);
         intent.putExtra(IGame.PREF_PUZZLE, (String) msg.get(IGame.PREF_PUZZLE));
         intent.putExtra(IGame.PREF_INIT_PUZZLE, (String) msg.get(IGame.PREF_INIT_PUZZLE));
         startActivity(intent);
@@ -361,10 +376,10 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 服务端：客户端请求连接的回调
      */
-    private int diff;
-    private int type;
-    private boolean tip;
-    private String name;
+    protected int diff;
+    protected int type;
+    protected boolean tip;
+    protected String name;
 
     protected void onRequestConnect(BlueMessage msg) {
         if(this.isFinishing()){

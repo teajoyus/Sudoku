@@ -71,7 +71,7 @@ public class GameCommon extends BaseActivity implements IGame {
             System.out.print(initPuzzle[i]+",");
         }
         System.out.println("");
-//        test();
+//        testReferHelp();
     }
 
     /**
@@ -841,8 +841,8 @@ public class GameCommon extends BaseActivity implements IGame {
     /**
      * 收到对方请求下一局游戏
      */
-    protected void onReceiveNextGame(){
-
+    protected void onReceiveNextGame(BlueMessage msg){
+        onRequestConnect(msg);
     }
     @Override
     protected void receive(BlueMessage msg) {
@@ -866,7 +866,7 @@ public class GameCommon extends BaseActivity implements IGame {
                 onConnectHelp();
                 break;
             case BlueMessage.HEADER_NEXT_GAME_MESSAGE:
-                onReceiveNextGame();
+                onReceiveNextGame(msg);
                 break;
 
 

@@ -3,6 +3,7 @@
     android:id="@+id/root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
 
@@ -55,6 +56,7 @@
                     android:layout_weight="12"
                     android:background="@drawable/selector_common_edit"
                     android:ems="10"
+                    android:textColor="#000000"
                     android:hint="输入聊天内容"
                     android:padding="5dp"
                     android:textSize="18sp" >

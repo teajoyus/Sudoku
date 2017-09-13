@@ -151,7 +151,8 @@ public class PuzzleView extends View {
                         canvas.drawRect(r, pk);
 
                         /**如果是交流类型的话，则额外要绘制每个方格里面的参考数字，如果方格还没有确定数字的话*/
-                    } else if (game.getType() == IGame.GAME_PK_TCOMMUNICATION && game.isTrue(IGame.GAME_PK_TCOMMUNICATION, i, j)) {
+                    }
+                    if (game.getType() == IGame.GAME_PK_TCOMMUNICATION && game.isTrue(IGame.GAME_PK_TCOMMUNICATION, i, j)) {
                         Paint prefence = new Paint(Paint.ANTI_ALIAS_FLAG);
                         prefence.setColor(getResources().getColor(
                                 R.color.puzzle_foreground));

@@ -113,6 +113,7 @@ public class ManualActivity extends BaseActivity {
         	R.drawable.screen4,
         	R.drawable.screen5,
         	R.drawable.screen6,
+        	R.drawable.screen7,
     	};
     	
         public ManualPagerAdapter(FragmentManager fm, Resources res) {
@@ -132,7 +133,7 @@ public class ManualActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return mTitles.length;
+            return mImages.length;
         }
         
         @Override

@@ -122,6 +122,7 @@ public class SudokuMain extends BaseActivity implements OnClickListener{
 //        intent.putExtra(IGame.BLUE_NAME, "iphone 7");
         intent.putExtra(IGame.BLUE_TYPE_PK, IGame.GAME_LOCAL);
         intent.putExtra(IGame.BLUE_TIP_PK, true);
+//        Prefs.setHints(this,true);
         startActivity(intent);
     }
 

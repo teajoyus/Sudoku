@@ -271,9 +271,6 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
      * 连接已经配对的蓝牙
      * @param device
      */
-    private int diff = 0;//选中的难度
-    private int type;//挑战类型
-    private boolean tip;//要不要提示
     private BluetoothDevice device;//要pk的玩家
     private void connect(BluetoothDevice device){
         this.device = device;
@@ -326,18 +323,5 @@ public class BlueActivity extends BaseActivity implements View.OnClickListener{
     protected void onClientByServerConfirm() {
         super.onClientByServerConfirm();
 
-        Intent intent =null;
-        if(type==0){
-            intent =new Intent(this, GamePKTime.class);
-        }else if(type==1){
-            intent =new Intent(this, GamePKCompertition.class);
-        }else{
-            intent =new Intent(this, GamePKCommunication.class);
-        }
-        intent.putExtra(IGame.KEY_DIFFICULTY, diff);
-        intent.putExtra(IGame.BLUE_NAME, device.getName());
-        intent.putExtra(IGame.BLUE_TYPE_PK, type);
-        intent.putExtra(IGame.BLUE_TIP_PK, tip);
-        startActivity(intent);
     }
 }
